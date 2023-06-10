@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { redirect } from 'react-router-dom'
 
 const GITHUB_CLIENT_ID = '0b3d7ed9ff20b068f060'
 const GITHUB_CALLBACK_URL = 'http://localhost:5173/auth/github/callback'
@@ -15,30 +16,30 @@ const GitHubLoginButton = () => {
 }
 
 const GitHubAuth = () => {
-  // useEffect(() => {
-  //   const code = new URLSearchParams(window.location.search).get('code')
-  //   if (!code) {
-  //     return console.error(`code is missing`)
-  //   }
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get('code')
+    if (!code) {
+      return console.error(`code is missing`)
+    }
 
-  //   const url = `https://github.com/login/oauth/access_token?client_id=${GITHUB_CLIENT_ID}&client_secret=${GITHUB_CLIENT_SECRET}&code=${code}&redirect_uri=${GITHUB_CALLBACK_URL}`
-
-  //   fetch(url, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json'
-  //     }
-  //   })
-  //   .then(response => {
-  //     const access_token = response.data.access_token;
-  //     console.log(access_token)
-  //     // handle success
-
-  //   })
-  //   .catch(error => {
-  //     // handle error
-  //   })
-  // }, [])
+    fetch(`http://localhost:5000/api/auth/github/callback`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ code }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Save the access token to local storage or a cookie
+      localStorage.setItem('access_token', data.access_token);
+      redirect('/')
+    })
+    .catch(error => {
+      console.error(error);
+      // handle error
+    })
+  }, []);
 
   return (
     <div>Authenticating...</div>
