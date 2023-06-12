@@ -1,13 +1,37 @@
 import express from "express";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-
+import saveUser from "./db/database.js";
 dotenv.config();
 
+const secret = process.env.JWT_SECRET;
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+    allowedHeaders: [
+      "set-cookie",
+      "Content-Type",
+      "Acess-Control-Allow-Origin",
+      "Access-Control-Allow-Credentials",
+    ],
+  }),
+);
 app.use(express.json());
+
+app.get("/api/test", async (req, res) => {
+  const authToken = jwt.sign({ id: 123, name: "brandon" }, secret);
+  res.cookie("authToken", authToken, {
+    path: "/",
+    maxAge: 24 * 60 * 60 * 1000 * 30,
+    httpOnly: true,
+  });
+
+  res.sendStatus(200);
+});
 
 app.post("/api/auth/github/callback", async (req, res) => {
   const { code } = req.body;
