@@ -26,6 +26,7 @@ app.post("/api/auth/github/callback", async (req, res) => {
           client_secret: process.env.GITHUB_CLIENT_SECRET,
           code,
         }),
+        timeout: 15000,
       },
     );
 
