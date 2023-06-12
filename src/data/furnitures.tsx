@@ -1,5 +1,5 @@
-import { Product } from "../App"
-import TableLamp from "@furnitures/table-lamp.jpg"
+import { Product } from "../routes/Root";
+import TableLamp from "@furnitures/table-lamp.jpg";
 
 const furnitures: Product[] = [
   {
@@ -9,8 +9,8 @@ const furnitures: Product[] = [
     description: "",
     image: TableLamp,
     category: ["light"],
-    isInShoppingBag: false
-  }
-]
+    isInShoppingBag: false,
+  },
+];
 
 export default furnitures;

@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import Header from './Header'
-import { ProductsContext } from '../context/ProductsContext';
-import furnitures from '../data/furnitures';
-import { Product } from '../App';
+import { useState } from "react";
+import Header from "./Header";
+import { ProductsContext } from "../context/ProductsContext";
+import furnitures from "../data/furnitures";
+import { Product } from "../routes/Root";
 
 export default function Home() {
   const [products] = useState<Product[]>(furnitures);
@@ -14,5 +14,5 @@ export default function Home() {
         {/* <ProductGrid /> */}
       </ProductsContext.Provider>
     </div>
-  )
+  );
 }
