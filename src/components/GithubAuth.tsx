@@ -10,7 +10,14 @@ const GitHubLoginButton = () => {
     window.location.href = githubOAuthURL;
   };
 
-  return <button onClick={handleLogin}>Signin with GitHub</button>;
+  return (
+    <button
+      className="header-nav__button header-nav__button--signin"
+      onClick={handleLogin}
+    >
+      Signin
+    </button>
+  );
 };
 
 const GitHubAuth = () => {
@@ -35,15 +42,25 @@ const GitHubAuth = () => {
       );
 
       if (res.status === 200) {
-        const data = await res.json();
-        // Save the access token to local storage or a cookie
-        localStorage.setItem("access_token", data.access_token);
-        // Why this code still runs after res.status(500)?
-        // that was because inside server.js, it didn't throw any error,
-        // res.status(500).json({ error: error.message });
-        navigate("/");
+        const { access_token } = await res.json();
+        // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#3-use-the-access-token-to-access-the-api
+        const userRes = await fetch(`https://api.github.com/user`, {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          const { login, avatar_url } = userData;
+          localStorage.setItem("interioUserame", login);
+          localStorage.setItem("interioAvatarUrl", avatar_url);
+          navigate("/");
+        } else {
+          console.error(userRes.statusText);
+        }
       } else {
-        console.error("something wrong");
+        console.error(res.statusText);
       }
     })();
   }, []);
