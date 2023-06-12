@@ -1,5 +1,5 @@
-import { ShoppingBag } from "./Icon"
-import { useProductsContext } from "../context/ProductsContext"
+import { ShoppingBag } from "./Icon";
+import { useProductsContext } from "../context/ProductsContext";
 
 export default function ShoppingCart() {
   const products = useProductsContext();
@@ -8,9 +8,11 @@ export default function ShoppingCart() {
   });
 
   return (
-    <button className="shopping-bag">
+    <button className="shopping-bag header-nav__button">
       <ShoppingBag />
-      <span>{productsInShoppingBag.length}</span>
+      <span className="shopping-bag__counter">
+        {productsInShoppingBag.length}
+      </span>
     </button>
-  )
+  );
 }

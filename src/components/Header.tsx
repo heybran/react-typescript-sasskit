@@ -1,17 +1,13 @@
-import Logo from "./Logo"
-import Search from "./Search"
-import ShoppingCart from "./ShoppingCart"
-import Notification from "./Notification"
-import { GitHubLoginButton } from "./GithubAuth"
+import Logo from "./Logo";
+import Search from "./Search";
+import Nav from "./Nav";
 
 export default function Header() {
   return (
-    <header>
+    <header className="interio-header">
       <Logo />
       <Search />
-      <ShoppingCart />
-      <Notification />
-      <GitHubLoginButton />
+      <Nav />
     </header>
-  )
+  );
 }

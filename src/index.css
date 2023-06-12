@@ -12,12 +12,12 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --background-light-grey: #F8F8F8;
+  --background-light-grey: #f8f8f8;
   --background-light-gray: var(--background-light-grey);
-  --border-light-grey: #EFEFEF;
+  --border-light-grey: #efefef;
   --border-light-gray: var(--border-light-grey);
   --border-radius-medium: 60px;
-  --text-grey: #808D9E;
+  --text-grey: #808d9e;
   --text-gray: var(--text-grey);
   --size-icon-small: 16px;
   --size-icon-medium: 24px;
@@ -26,6 +26,9 @@
   --safe-area-bottom: 0;
   --safe-area-left: 0;
   --safe-area-right: 0;
+
+  --color-brand-primary: #fec500;
+  --color-brand-primary-hover: #e6c345;
 }
 
 @supports (top: env(safe-area-inset-top, 0)) {
@@ -48,26 +51,50 @@ body {
 .content-wrapper {
   padding-inline: 2rem;
   max-width: 1320px;
+  margin: auto;
 }
 
-.search-bar {
+.interio-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding-block: 12px;
+}
+
+.interio-header__logo {
+  border-radius: 8px;
+}
+
+.interio-header__logo:focus,
+.interio-header__logo:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
+}
+
+.interio-header__search-bar {
   border-radius: var(--border-radius-medium);
   display: grid;
   align-items: center;
   grid-template-columns: auto 1fr;
-  gap: .5em;
+  gap: 0.5em;
   color: var(--text-gray);
   background: var(--background-light-grey);
   border: 1px solid var(--border-light-gray);
   padding: 10px;
 }
 
-.search-bar .icon {
+.interio-header__search-bar:focus-within {
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
+}
+
+.interio-header__search-bar .icon {
   width: 24px;
   height: 24px;
 }
 
-.search-bar__input {
+.interio-header__search-input {
   background: transparent;
   border: none transparent;
   font-size: inherit;
@@ -98,9 +125,7 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  border: none;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -109,11 +134,41 @@ button {
   transition: border-color 0.25s;
 }
 
-button:hover {
-  border-color: #646cff;
-}
-
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
+}
+
+.header-nav__button:not(.header-nav__button--signin) {
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+}
+
+.header-nav__button--signin {
+  background-color: var(--color-brand-primary);
+  border-width: 2px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+}
+
+.header-nav__button--signin:hover {
+  background-color: var(--color-brand-primary-hover);
+}
+
+.shopping-bag {
+  position: relative;
+}
+
+.shopping-bag__counter {
+  position: absolute;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
 }
