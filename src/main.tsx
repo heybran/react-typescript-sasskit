@@ -1,10 +1,28 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./routes/Root.tsx";
+import { GitHubAuth } from "./components/GithubAuth.tsx";
+import About from "./routes/About.tsx";
+import "./index.css";
 
-ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/auth/github/callback",
+    element: <GitHubAuth />,
+  },
+  {
+    path: "/about",
+    element: <About />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("app") as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>,
-)
+);
