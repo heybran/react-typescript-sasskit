@@ -47,11 +47,9 @@ app.get("/api/user/verify", async (req, res) => {
   });
 });
 
-app.get("/api/test", async (req, res) => {
-  const userCookie = jwt.sign(
-    { username: "brandon", avatarUrl: "123" },
-    secret,
-  );
+app.post("/api/set-cookie", async (req, res) => {
+  const user = req.body;
+  const userCookie = jwt.sign(user, secret);
   res.cookie("user", userCookie, {
     path: "/",
     maxAge: 24 * 60 * 60 * 1000 * 30,
@@ -64,6 +62,21 @@ app.get("/api/test", async (req, res) => {
 app.post("/api/auth/github/callback", async (req, res) => {
   const { code } = req.body;
 
+  /**
+   * during development, this error happens quite a lot
+   TypeError: fetch failed
+      at Object.fetch (node:internal/deps/undici/undici:14294:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async file:///Users/brandon/codes/interio-react-app/server/server.js:66:22 {
+    cause: ConnectTimeoutError: Connect Timeout Error
+        at onConnectTimeout (node:internal/deps/undici/undici:8087:28)
+        at node:internal/deps/undici/undici:8045:50
+        at Immediate._onImmediate (node:internal/deps/undici/undici:8076:13)
+        at process.processImmediate (node:internal/timers:471:21) {
+      code: 'UND_ERR_CONNECT_TIMEOUT'
+    }
+  }
+   */
   try {
     const response = await fetch(
       `https://github.com/login/oauth/access_token`,
