@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
 import { ProductsContext } from "../context/ProductsContext";
 import furnitures from "../data/furnitures";
+import useUser from "../hooks/useUser";
 
 export interface Product {
   sku: string;
@@ -16,13 +17,18 @@ export interface Product {
 
 export default function App() {
   const [products] = useState<Product[]>(furnitures);
+  const { isPending, user } = useUser();
+
   return (
-    <div className="content-wrapper">
-      <ProductsContext.Provider value={products}>
-        <Header />
-        <HeroSection />
-        {/* <ProductGrid /> */}
-      </ProductsContext.Provider>
-    </div>
+    <>
+      {!isPending && (
+        <div className="content-wrapper">
+          <ProductsContext.Provider value={products}>
+            <Header />
+            <HeroSection />
+          </ProductsContext.Provider>
+        </div>
+      )}
+    </>
   );
 }
