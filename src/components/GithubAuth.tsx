@@ -30,16 +30,13 @@ const GitHubAuth = () => {
         return console.error(`code is missing`);
       }
 
-      const res = await fetch(
-        `${import.meta.env.VITE_REACT_APP_SERVER_URL}/api/auth/github/callback`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ code }),
+      const res = await fetch("/api/auth/github/callback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ code }),
+      });
 
       if (res.status === 200) {
         const { access_token } = await res.json();
@@ -52,10 +49,20 @@ const GitHubAuth = () => {
 
         if (userRes.ok) {
           const userData = await userRes.json();
-          const { login, avatar_url } = userData;
-          localStorage.setItem("interioUserame", login);
-          localStorage.setItem("interioAvatarUrl", avatar_url);
-          navigate("/");
+          const username = userData.login;
+          const avatarUrl = userData.avatar_url;
+          fetch("/api/set-cookie", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              avatarUrl,
+            }),
+          })
+            .then(() => navigate("/account"))
+            .catch(() => navigate("/"));
         } else {
           console.error(userRes.statusText);
         }
