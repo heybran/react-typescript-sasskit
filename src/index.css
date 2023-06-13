@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: var(--color-brand-primary);
+  color: #14203e;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -27,9 +27,9 @@
   --safe-area-left: 0;
   --safe-area-right: 0;
 
-  --color-brand-primary: #14203e;
+  --color-brand-primary: #6c63ff;
   --color-brand-secondary: #f6f0e8;
-  --color-brand-primary-hover: #e6c345;
+  --color-brand-primary-hover: #6c63ff;
 }
 
 @supports (top: env(safe-area-inset-top, 0)) {
@@ -103,7 +103,17 @@ body {
 }
 
 .hero {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-block: 1rem;
+}
+
+.hero__content {
   max-width: 50ch;
+}
+
+.hero__presentation {
 }
 
 .sr-only {

@@ -7,6 +7,7 @@ export default function Nav() {
   return (
     <nav className="interio-header__nav header-nav">
       <Link to="/about">About</Link>
+      <Link to="/features">Features</Link>
       <Link to="/pricing">Pricing</Link>
       <SignupButton />
     </nav>
