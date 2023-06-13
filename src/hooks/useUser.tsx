@@ -18,12 +18,9 @@ export default function useUser() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_REACT_APP_SERVER_URL}/api/user/verify`,
-          {
-            credentials: "include",
-          },
-        );
+        const res = await fetch(`/api/user/verify`, {
+          credentials: "include",
+        });
 
         const { username, avatarUrl } = await res.json();
         setUser({

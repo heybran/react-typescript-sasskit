@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const GITHUB_CLIENT_ID = "0b3d7ed9ff20b068f060";
-const GITHUB_CALLBACK_URL = "http://localhost:5173/auth/github/callback";
+const GITHUB_CALLBACK_URL = location.origin + "/auth/github/callback";
 const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_url=${GITHUB_CALLBACK_URL}&scope=user`;
 
 const GitHubLoginButton = () => {
