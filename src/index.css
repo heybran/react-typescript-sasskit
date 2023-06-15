@@ -49,10 +49,24 @@ body {
   margin: 0;
 }
 
+a {
+  color: inherit;
+}
+
+.is-pending {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .content-wrapper {
   padding-inline: 2rem;
   max-width: 1320px;
   margin: auto;
+}
+
+.content {
+  padding-top: 2rem;
 }
 
 .interio-header {
@@ -100,6 +114,55 @@ body {
   border: none transparent;
   font-size: inherit;
   outline: none;
+}
+
+.header-nav__link {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 400;
+}
+
+.user {
+  max-width: 32rem;
+  margin: auto;
+}
+
+.user__avartar {
+  max-width: 50%;
+  text-align: center;
+  margin: auto;
+}
+
+.user__avartar img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.user__details {
+  list-style: none;
+  padding: 0;
+}
+
+.user__details + a {
+  margin-top: 3rem;
+}
+
+.user_detail {
+  display: flex;
+}
+
+.user__detail .flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user__detail p {
+  margin: 0;
+}
+
+.user__detail + .user__detail {
+  margin-top: 2rem;
 }
 
 .hero {
@@ -187,4 +250,28 @@ button:focus-visible {
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
+}
+
+.primary-button {
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-brand-primary);
+  transition-duration: 300ms;
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter,
+    backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-brand-primary);
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.primary-button:hover {
+  box-shadow: rgb(164 161 204 / 42%) 0px 0px 0px 3px;
 }
