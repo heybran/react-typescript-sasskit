@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const GITHUB_CLIENT_ID = "0b3d7ed9ff20b068f060";
 const GITHUB_CALLBACK_URL = location.origin + "/auth/github/callback";
@@ -21,8 +20,6 @@ const GitHubLoginButton = () => {
 };
 
 const GitHubAuth = () => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     (async () => {
       const code = new URLSearchParams(window.location.search).get("code");
@@ -61,8 +58,8 @@ const GitHubAuth = () => {
               avatarUrl,
             }),
           })
-            .then(() => navigate("/account"))
-            .catch(() => navigate("/"));
+            .then(() => (location.href = "/account"))
+            .catch((error) => console.error(error));
         } else {
           console.error(userRes.statusText);
         }
