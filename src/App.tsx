@@ -6,6 +6,7 @@ import useUser from "./hooks/useUser.tsx";
 import { User, UserContext } from "./context/UserContext.tsx";
 import About from "./routes/About.tsx";
 import Account from "./routes/Account.tsx";
+import Pricing from "./routes/Pricing.tsx";
 import "./index.css";
 
 interface ProtectedRouteProps {
@@ -29,23 +30,26 @@ const ProtectedRoute = ({
 export default function App() {
   const { isPending, user } = useUser();
 
-  return (
-    <div className={isPending ? "content-wrapper hidden" : "content-wrapper"}>
-      <UserContext.Provider value={user}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route
-            path="/account"
-            element={
-              <ProtectedRoute user={user} redirectPath="/">
-                <Account />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/auth/github/callback" element={<GitHubAuth />} />
-        </Routes>
-      </UserContext.Provider>
-    </div>
-  );
+  if (!isPending) {
+    return (
+      <div className="content-wrapper">
+        <UserContext.Provider value={user}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute user={user} redirectPath="/">
+                  <Account />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/auth/github/callback" element={<GitHubAuth />} />
+          </Routes>
+        </UserContext.Provider>
+      </div>
+    );
+  }
 }

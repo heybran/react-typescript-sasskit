@@ -275,3 +275,46 @@ button:focus-visible {
 .primary-button:hover {
   box-shadow: rgb(164 161 204 / 42%) 0px 0px 0px 3px;
 }
+
+.pricing {
+  text-align: center;
+}
+
+.pricing h1 {
+  margin-block: 0.5rem;
+}
+
+.plans {
+  display: grid;
+  gap: 2rem;
+  align-items: stretch;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 2rem;
+}
+
+.plan {
+  border-radius: 0.75rem;
+  padding: 1em;
+  border: 1px solid #f1f1f1;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan__details {
+  flex-grow: 1;
+}
+
+.plan__name {
+  font-size: 2rem;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.plan__price {
+  font-weight: 600;
+  margin-top: 2rem;
+}
+
+.plan button {
+  margin-top: 1rem;
+}
