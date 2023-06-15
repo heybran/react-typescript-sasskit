@@ -4,11 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:client": "vite",
+    "dev:server": "cd server && pnpm run dev",
+    "start:server": "cd server && pnpm run start",
+    "dev": "concurrently 'pnpm run dev:client' 'pnpm run dev:server'",
     "build": "tsc && vite build --outDir=./server/build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "start": "pnpm run build && pnpm run start:server"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -21,6 +25,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
     "@vitejs/plugin-react": "^4.0.0",
+    "concurrently": "^8.2.0",
     "eslint": "^8.42.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.5",
