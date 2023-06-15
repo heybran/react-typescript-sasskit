@@ -3,6 +3,7 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookirParser from "cookie-parser";
+import path from "path";
 dotenv.config();
 
 const secret = process.env.JWT_SECRET;
@@ -28,6 +29,12 @@ app.use(cookirParser(secret));
 // Serve static files from the ./build folder
 app.use(express.static("build"));
 
+// Server index.html for all non-api routes
+app.get(/^((?!\/api\/).)*$/, async (req, res) => {
+  const indexPath = path.resolve(process.cwd(), "build", "index.html");
+  res.sendFile(indexPath);
+});
+
 app.get("/api/user/verify", async (req, res) => {
   const userCookie = req.cookies.user;
 
@@ -45,6 +52,11 @@ app.get("/api/user/verify", async (req, res) => {
       res.json({ username, avatarUrl });
     }
   });
+});
+
+app.post("/api/user/signout", async (req, res) => {
+  res.clearCookie("user");
+  res.status(200).send({ message: "Coolied cleared" });
 });
 
 app.post("/api/set-cookie", async (req, res) => {
