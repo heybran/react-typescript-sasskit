@@ -103,7 +103,7 @@ app.post("/api/auth/github/callback", async (req, res) => {
           client_secret: process.env.GITHUB_CLIENT_SECRET,
           code,
         }),
-        timeout: 15000,
+        timeout: 50000,
       },
     );
 
@@ -116,7 +116,7 @@ app.post("/api/auth/github/callback", async (req, res) => {
     res.json({ access_token: data.access_token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error });
   }
 });
 
