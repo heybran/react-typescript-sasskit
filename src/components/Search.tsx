@@ -11,7 +11,7 @@ export default function Search() {
         id="search-input"
         className="interio-header__search-input"
         type="text"
-        placeholder={`Try "Table", "Sofa", "Chair"`}
+        placeholder="Search anything..."
         tabIndex={0}
         autoComplete="on"
       />

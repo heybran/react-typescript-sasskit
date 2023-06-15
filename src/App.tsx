@@ -32,24 +32,30 @@ export default function App() {
 
   if (!isPending) {
     return (
-      <div className="content-wrapper">
-        <UserContext.Provider value={user}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route
-              path="/account"
-              element={
-                <ProtectedRoute user={user} redirectPath="/">
-                  <Account />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/auth/github/callback" element={<GitHubAuth />} />
-          </Routes>
-        </UserContext.Provider>
-      </div>
+      <UserContext.Provider value={user}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route
+            path="/dashboard/account"
+            element={
+              <ProtectedRoute user={user} redirectPath="/">
+                <Account />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/pricing"
+            element={
+              <ProtectedRoute user={user} redirectPath="/">
+                <Pricing dashboard={true} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/auth/github/callback" element={<GitHubAuth />} />
+        </Routes>
+      </UserContext.Provider>
     );
   }
 }

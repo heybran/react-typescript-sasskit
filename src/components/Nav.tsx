@@ -17,8 +17,8 @@ export default function Nav() {
         Pricing
       </NavLink>
       {user.isLoggedIn ? (
-        <NavLink className="header-nav__link" to="/account">
-          Account
+        <NavLink className="header-nav__link" to="/dashboard/account">
+          Dashboard
         </NavLink>
       ) : null}
       {!user.isLoggedIn ? <SignupButton /> : null}

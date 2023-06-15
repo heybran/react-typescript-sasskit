@@ -1,6 +1,6 @@
 import Button from "../components/Button";
 import { useUserContext } from "../context/UserContext";
-import Layout from "../layouts/BaseLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
 import { Link } from "react-router-dom";
 import { MouseEvent } from "react";
 
@@ -19,7 +19,7 @@ export default function Account() {
   };
 
   return (
-    <Layout>
+    <DashboardLayout>
       <div className="user">
         <div className="user__avartar">
           <img
@@ -47,6 +47,6 @@ export default function Account() {
         </ul>
         <Button onClick={handleSignout} text="Sign out" theme="primary" />
       </div>
-    </Layout>
+    </DashboardLayout>
   );
 }
