@@ -14,7 +14,7 @@
 
   --background-light-grey: #f8f8f8;
   --background-light-gray: var(--background-light-grey);
-  --border-light-grey: #efefef;
+  --border-light-grey: #d8d8d8;
   --border-light-gray: var(--border-light-grey);
   --border-radius-medium: 60px;
   --text-grey: #808d9e;
@@ -114,6 +114,7 @@ a {
   border: none transparent;
   font-size: inherit;
   outline: none;
+  font-size: 1.1em;
 }
 
 .header-nav__link {
@@ -317,4 +318,52 @@ button:focus-visible {
 
 .plan button {
   margin-top: 1rem;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+}
+
+.dashboard-nav {
+  padding: 1rem;
+  border-right: 1px solid var(--border-light-gray);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height));
+}
+
+.dashboard-nav button {
+  margin-top: auto;
+}
+
+.interio-header--dashboard {
+  border-bottom: 1px solid var(--border-light-gray);
+  padding-inline: 1rem;
+}
+
+.dashboard-nav__link {
+  text-decoration: none;
+  display: block;
+  font-size: 1.1em;
+  font-weight: 500;
+  padding: 0.4em 0.6em;
+  border-radius: 0.375rem;
+}
+
+.dashboard-nav__link + .dashboard-nav__link {
+  margin-top: 0.2em;
+}
+
+.dashboard-nav__link:not(.active):hover {
+  background-color: var(--color-brand-primary);
+  color: white;
+}
+
+.dashboard-nav__link.active {
+  background-color: #f1f1f1;
+}
+
+main {
+  padding: 2rem 4rem;
 }
