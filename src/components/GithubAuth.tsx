@@ -58,7 +58,7 @@ const GitHubAuth = () => {
               avatarUrl,
             }),
           })
-            .then(() => (location.href = "/account"))
+            .then(() => (location.href = "/dashboard/account"))
             .catch((error) => console.error(error));
         } else {
           console.error(userRes.statusText);
@@ -69,7 +69,7 @@ const GitHubAuth = () => {
     })();
   }, []);
 
-  return <div>Authenticating...</div>;
+  return <div className="authenticating">Authenticating...</div>;
 };
 
 export { GitHubLoginButton, GitHubAuth };

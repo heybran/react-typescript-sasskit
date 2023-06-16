@@ -1,6 +1,10 @@
+import { useUserContext } from "../context/UserContext";
 import Button from "./Button";
+import SignupButton from "./Signup";
 
 export default function PricingCard({ plan }: { plan: string }) {
+  const user = useUserContext();
+
   return (
     <div className="plan">
       <div className="plan__details">
@@ -20,10 +24,14 @@ export default function PricingCard({ plan }: { plan: string }) {
           ? "$5.00 / month"
           : "$10.00 / month"}
       </div>
-      <Button
-        text={plan.trim() === "free" ? "Current plan" : "Upgrade"}
-        theme={plan.trim() === "free" ? "disabled" : ""}
-      />
+      {user.isLoggedIn ? (
+        <Button
+          text={plan.trim() === "free" ? "Current plan" : "Upgrade"}
+          theme={plan.trim() === "free" ? "disabled" : ""}
+        />
+      ) : (
+        <SignupButton />
+      )}
     </div>
   );
 }

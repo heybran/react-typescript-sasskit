@@ -5,8 +5,9 @@ import { useEffect, useRef } from "react";
 export default function DashboardHeader() {
   const headerRef = useRef<HTMLElement>(null);
   useEffect(() => {
+    const header = headerRef.current as HTMLElement;
     const headerHeight = window
-      .getComputedStyle(headerRef.current)
+      .getComputedStyle(header)
       .getPropertyValue("height");
     document.body.style.setProperty("--header-height", headerHeight);
   }, []);

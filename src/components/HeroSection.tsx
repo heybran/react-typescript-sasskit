@@ -1,7 +1,10 @@
 import SignupButton from "./Signup";
 import buildingWebsitesSVG from "../assets/building_websites.svg";
+import { useUserContext } from "../context/UserContext";
 
 export default function HeroSection() {
+  const user = useUserContext();
+
   return (
     <div className="hero">
       <div className="hero__content">
@@ -10,7 +13,7 @@ export default function HeroSection() {
           Empower designers to build professional, custom websites in a
           completely visual canvas with no code.
         </p>
-        <SignupButton />
+        {!user.isLoggedIn ? <SignupButton /> : null}
       </div>
       <div className="hero__presentation">
         <img src={buildingWebsitesSVG} alt="Building Websites Illustrationi" />
