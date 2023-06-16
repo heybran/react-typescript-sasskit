@@ -82,7 +82,7 @@ a {
   text-decoration: none;
   align-items: center;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: 2rem;
   font-weight: bold;
   gap: 0.5rem;
@@ -158,11 +158,21 @@ a {
   text-decoration: none;
   color: inherit;
   font-weight: 400;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+}
+
+.header-nav__link:hover {
+  background: #f1f1f1;
 }
 
 .user {
   max-width: 32rem;
   margin: auto;
+}
+
+.user button {
+  width: 100%;
 }
 
 .user__avartar {
@@ -212,9 +222,6 @@ a {
 
 .hero__content {
   max-width: 50ch;
-}
-
-.hero__presentation {
 }
 
 .sr-only {
@@ -307,7 +314,10 @@ button:focus-visible {
   font-weight: 500;
   display: block;
   text-align: center;
-  width: 100%;
+}
+
+.primary-button.small {
+  padding-block: 0.25rem;
 }
 
 .primary-button:hover {
@@ -369,6 +379,8 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   height: calc(100vh - var(--header-height));
+  width: 250px;
+  max-width: 250px;
 }
 
 .dashboard-nav button {
@@ -378,6 +390,7 @@ button:focus-visible {
 .interio-header--dashboard {
   border-bottom: 1px solid var(--border-light-gray);
   padding-inline: 1rem;
+  grid-template-columns: calc(250px - 1rem) 50ch;
 }
 
 .dashboard-nav__link {
@@ -410,4 +423,11 @@ button.disabled {
   cursor: not-allowed;
   pointer-events: none;
   filter: grayscale(0.9);
+}
+
+.authenticating {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
