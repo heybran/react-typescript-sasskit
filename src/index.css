@@ -79,6 +79,43 @@ a {
 
 .interio-header__logo {
   border-radius: 8px;
+  text-decoration: none;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  gap: 0.5rem;
+}
+
+.interio-header__logo-inner {
+  width: 3rem;
+  height: 3rem;
+  background: var(--color-brand-primary);
+  border-radius: 50%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.interio-header__logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.interio-header__logo-text span:first-child {
+  font-size: 0.3em;
+  display: block;
+}
+
+.interio-header__logo-text span:last-child {
+  line-height: 1;
+  font-size: 0.9em;
+}
+
+.interio-header__logo img {
+  filter: brightness(200);
 }
 
 .interio-header__logo:focus,
@@ -279,6 +316,7 @@ button:focus-visible {
 
 .pricing {
   text-align: center;
+  margin-top: 2rem;
 }
 
 .pricing h1 {
@@ -296,7 +334,7 @@ button:focus-visible {
 .plan {
   border-radius: 0.75rem;
   padding: 1em;
-  border: 1px solid #f1f1f1;
+  border: 1px solid var(--border-light-gray);
   display: flex;
   flex-direction: column;
 }
@@ -366,4 +404,10 @@ button:focus-visible {
 
 main {
   padding: 2rem 4rem;
+}
+
+button.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.9);
 }
