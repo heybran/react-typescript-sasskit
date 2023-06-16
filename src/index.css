@@ -53,6 +53,10 @@ a {
   color: inherit;
 }
 
+img {
+  max-width: 100%;
+}
+
 .is-pending {
   opacity: 0;
   visibility: hidden;
@@ -89,8 +93,9 @@ a {
 }
 
 .interio-header__logo-inner {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.3rem;
   background: var(--color-brand-primary);
   border-radius: 50%;
   align-items: center;
@@ -105,13 +110,13 @@ a {
 }
 
 .interio-header__logo-text span:first-child {
-  font-size: 0.3em;
+  font-size: 0.33em;
   display: block;
 }
 
 .interio-header__logo-text span:last-child {
   line-height: 1;
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 .interio-header__logo img {
@@ -152,6 +157,10 @@ a {
   font-size: inherit;
   outline: none;
   font-size: 1.1em;
+}
+
+.header-nav button {
+  margin-left: auto;
 }
 
 .header-nav__link {
@@ -294,7 +303,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 0.3rem;
 }
 
 .primary-button {
@@ -430,4 +439,15 @@ button.disabled {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.about {
+  max-width: 70ch;
+  text-align: center;
+  margin: auto;
+  padding-top: 4rem;
+}
+
+.about__presentation {
+  margin-top: 2rem;
 }
