@@ -13,8 +13,8 @@ export default function Nav() {
 
   return (
     <nav className="interio-header__nav header-nav">
-      <NavLink className="header-nav__link" to="/features">
-        Features
+      <NavLink className="header-nav__link" to="/about">
+        About
       </NavLink>
       <NavLink className="header-nav__link" to="/pricing">
         Pricing

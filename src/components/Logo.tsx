@@ -8,7 +8,7 @@ export default function Logo() {
         <img src={reactIcon} alt="React Logo" />
       </div>
       <div className="interio-header__logo-text">
-        <span>React + TypeScript</span>
+        <span>React TypeScript</span>
         <span>SassKit</span>
       </div>
     </Link>

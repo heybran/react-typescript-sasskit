@@ -3,7 +3,7 @@ import Root from "./routes/Root.tsx";
 import { GitHubAuth } from "./components/GithubAuth.tsx";
 import useUser from "./hooks/useUser.tsx";
 import { UserContext } from "./context/UserContext.tsx";
-import Features from "./routes/Features.tsx";
+import About from "./routes/About.tsx";
 import Account from "./routes/Account.tsx";
 import Pricing from "./routes/Pricing.tsx";
 import Home from "./routes/Home.tsx";
@@ -19,7 +19,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Root />}>
             <Route index element={<Home />} />
-            <Route path="features" element={<Features />} />
+            <Route path="about" element={<About />} />
             <Route path="pricing" element={<Pricing />} />
           </Route>
           <Route path="/dashboard" element={<Dashboard />}>
