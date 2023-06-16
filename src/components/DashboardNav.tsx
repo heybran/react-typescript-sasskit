@@ -10,9 +10,9 @@ export default function DashboardNav() {
       <NavLink className="dashboard-nav__link" to="/dashboard/pricing">
         Pricing
       </NavLink>
-      <NavLink className="dashboard-nav__link" to="/dashboard/domains">
+      {/* <NavLink className="dashboard-nav__link" to="/dashboard/domains">
         Domains
-      </NavLink>
+      </NavLink> */}
       <Button text="Contact Support" />
     </nav>
   );

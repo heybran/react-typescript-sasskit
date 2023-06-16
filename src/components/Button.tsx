@@ -8,7 +8,7 @@ interface ButtonProps {
 
 export default function Button({ text, theme, onClick }: ButtonProps) {
   return (
-    <button className={"primary-button " + theme} onClick={onClick}>
+    <button className={"primary-button " + (theme ?? "")} onClick={onClick}>
       {text}
     </button>
   );

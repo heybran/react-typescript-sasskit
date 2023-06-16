@@ -20,7 +20,10 @@ export default function PricingCard({ plan }: { plan: string }) {
           ? "$5.00 / month"
           : "$10.00 / month"}
       </div>
-      <Button text={plan.trim() === "free" ? "Current plan" : "Upgrade"} />
+      <Button
+        text={plan.trim() === "free" ? "Current plan" : "Upgrade"}
+        theme={plan.trim() === "free" ? "disabled" : ""}
+      />
     </div>
   );
 }
