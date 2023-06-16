@@ -19,34 +19,28 @@ export default function Account() {
   };
 
   return (
-    <DashboardLayout>
-      <div className="user">
-        <div className="user__avartar">
-          <img
-            src={user.avatarUrl}
-            alt="User Avartar"
-            crossOrigin="anonymous"
-          />
-        </div>
-        <ul className="user__details">
-          <li className="user__detail">
-            <div>
-              <strong>Username</strong>
-            </div>
-            <p>{user.username}</p>
-          </li>
-          <li className="user__detail">
-            <div className="flex">
-              <strong>Subscription</strong>
-              <span>
-                <Link to="/account/upgrade">Upgrade</Link>
-              </span>
-            </div>
-            <p>Free</p>
-          </li>
-        </ul>
-        <Button onClick={handleSignout} text="Sign out" theme="primary" />
+    <div className="user">
+      <div className="user__avartar">
+        <img src={user.avatarUrl} alt="User Avartar" crossOrigin="anonymous" />
       </div>
-    </DashboardLayout>
+      <ul className="user__details">
+        <li className="user__detail">
+          <div>
+            <strong>Username</strong>
+          </div>
+          <p>{user.username}</p>
+        </li>
+        <li className="user__detail">
+          <div className="flex">
+            <strong>Subscription</strong>
+            <span>
+              <Link to="/dashboard/pricing">Upgrade</Link>
+            </span>
+          </div>
+          <p>Free</p>
+        </li>
+      </ul>
+      <Button onClick={handleSignout} text="Sign out" theme="primary" />
+    </div>
   );
 }
