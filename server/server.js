@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import cookirParser from "cookie-parser";
 import path from "path";
+import { createUser, getUser, updateUser, deleteUser } from "./user.js";
+
 dotenv.config();
 
 const secret = process.env.JWT_SECRET;
@@ -35,7 +37,7 @@ app.get(/^((?!\/api\/).)*$/, async (req, res) => {
   res.sendFile(indexPath);
 });
 
-app.get("/api/user/verify", async (req, res) => {
+app.get("/api/user", async (req, res) => {
   const userCookie = req.cookies.user;
 
   if (!userCookie) {
@@ -43,15 +45,38 @@ app.get("/api/user/verify", async (req, res) => {
     return;
   }
 
-  jwt.verify(userCookie, secret, (err, decoded) => {
+  jwt.verify(userCookie, secret, async (err, decoded) => {
     if (err) {
       console.error(`Error verify user JWT cookir`, err);
       res.status(401).send("Unauthorized");
     } else {
-      const { username, avatarUrl } = decoded;
-      res.json({ username, avatarUrl });
+      const { username } = decoded;
+      const user = await getUser({ username });
+      res.json({
+        username: user[0].username,
+        avatarUrl: user[0].avatarUrl,
+      });
     }
   });
+
+  /**
+   * If no user found: _RecordArray(0) []
+   * If user exists in database
+    _RecordArray(1) [
+      {
+        avatarUrl: 'https://avatars.githubusercontent.com/u/75633537?v=4',
+        id: 'rec_ci6mp943g23ng9c5g5gg',
+        password: '',
+        username: 'heybran',
+        xata: {
+          createdAt: 2023-06-17T08:19:48.960Z,
+          updatedAt: 2023-06-17T08:19:48.960Z,
+          version: 0
+        }
+      }
+    ]
+   */
+  // const user = await getUser({ username: "heybran" });
 });
 
 app.post("/api/user/signout", async (req, res) => {
@@ -59,9 +84,24 @@ app.post("/api/user/signout", async (req, res) => {
   res.status(200).send({ message: "Coolied cleared" });
 });
 
-app.post("/api/set-cookie", async (req, res) => {
+// curl -X POST -H "Content-Type: application/json" -d '{"username":"test1","password":"123","avatarUrl":"123"}' http://localhost:5000/api/user/create
+app.post("/api/user/create", async (req, res) => {
+  /** @type {import('./user.js').User} */
   const user = req.body;
-  const userCookie = jwt.sign(user, secret);
+  const create = await createUser({
+    password: "",
+    avatarUrl: "",
+    ...user,
+  });
+
+  console.log(create);
+  if (create.errors) {
+    res.status(500).json({ error: create.errors[0] });
+    return;
+  }
+
+  console.log("user created");
+  const userCookie = jwt.sign(user.username, secret);
   res.cookie("user", userCookie, {
     path: "/",
     maxAge: 24 * 60 * 60 * 1000 * 30,
