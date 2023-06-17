@@ -9,6 +9,7 @@ import Pricing from "./routes/Pricing.tsx";
 import Home from "./routes/Home.tsx";
 import "./index.css";
 import Dashboard from "./routes/Dashboard.tsx";
+import Register from "./routes/Register.tsx";
 
 export default function App() {
   const { isPending, user } = useUser();
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="about" element={<About />} />
             <Route path="pricing" element={<Pricing />} />
           </Route>
+          <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="account" element={<Account />} />
             <Route path="pricing" element={<Pricing />} />

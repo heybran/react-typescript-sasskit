@@ -451,3 +451,59 @@ button.disabled {
 .about__presentation {
   margin-top: 2rem;
 }
+
+.input-field {
+  width: 100%;
+  margin-inline: auto;
+  font-family: inherit;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 12px 20px;
+}
+
+.input-field + * {
+  margin-top: 1em;
+}
+
+.input-field:focus-within {
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+input {
+  font-size: 16px;
+  width: 100%;
+  margin-top: 6px;
+  border: none;
+  padding-inline: 0;
+  background: transparent;
+}
+
+input:focus-visible {
+  border: none;
+  outline: none;
+}
+
+input:focus::placeholder {
+  opacity: 0;
+}
+
+.register {
+  min-height: 100vh;
+  max-width: 800px;
+  margin-inline: auto;
+  padding: 4rem;
+}
+
+.register footer {
+  margin-top: 1em;
+}
+
+.register h1 {
+  text-align: center;
+}
