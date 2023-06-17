@@ -2,6 +2,7 @@ import Button from "../components/Button";
 import { useUserContext } from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { MouseEvent } from "react";
+import UploadWidget from "../components/UploadWidget";
 
 export default function Account() {
   const user = useUserContext();
@@ -21,6 +22,7 @@ export default function Account() {
     <div className="user">
       <div className="user__avartar">
         <img src={user.avatarUrl} alt="User Avartar" crossOrigin="anonymous" />
+        <UploadWidget buttonText="Change" />
       </div>
       <ul className="user__details">
         <li className="user__detail">
