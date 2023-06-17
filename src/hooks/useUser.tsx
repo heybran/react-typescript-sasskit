@@ -18,7 +18,7 @@ export default function useUser() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/api/user/verify`, {
+        const res = await fetch(`/api/user`, {
           credentials: "include",
         });
 

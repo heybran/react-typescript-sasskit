@@ -48,7 +48,7 @@ const GitHubAuth = () => {
           const userData = await userRes.json();
           const username = userData.login;
           const avatarUrl = userData.avatar_url;
-          fetch("/api/set-cookie", {
+          fetch("/api/user/create", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const GitHubAuth = () => {
               avatarUrl,
             }),
           })
-            .then(() => (location.href = "/dashboard/account"))
+            // .then(() => (location.href = "/dashboard/account"))
             .catch((error) => console.error(error));
         } else {
           console.error(userRes.statusText);
