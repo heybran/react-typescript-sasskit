@@ -1,6 +1,7 @@
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { Link } from "react-router-dom";
+import { GitHubLoginButton } from "../components/GithubAuth";
 
 export default function Register() {
   return (
@@ -25,6 +26,12 @@ export default function Register() {
           <Link to="/login">Sign in</Link>
         </footer>
       </form>
+      <div className="divider">
+        <div className="divider__line divider__line-top"></div>
+        <div className="divider__text">OR</div>
+        <div className="divider__line divider__line-bottom"></div>
+      </div>
+      <GitHubLoginButton />
     </div>
   );
 }

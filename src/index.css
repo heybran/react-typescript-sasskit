@@ -504,6 +504,55 @@ input:focus::placeholder {
   margin-top: 1em;
 }
 
+.register footer a {
+  margin-left: 0.3em;
+}
+
 .register h1 {
   text-align: center;
+}
+
+.divider {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  align-items: center;
+  width: 75%;
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.divider__line {
+  height: 1px;
+  background-color: var(--border-light-grey);
+}
+
+.divider__line-top {
+  top: 0;
+}
+
+.divider__line-bottom {
+  bottom: 0;
+}
+
+.divider__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: 1rem;
+}
+
+.divider + button {
+  color: white;
+  background-color: #14203e;
+  border: none;
+  display: flex;
+  align-items: center;
+  margin-inline: auto;
+  margin-top: 2rem;
+}
+
+.register svg {
+  width: 1.5rem;
+  margin-left: 0.5em;
 }
