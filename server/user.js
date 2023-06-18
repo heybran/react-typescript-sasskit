@@ -26,7 +26,7 @@ export async function createUser(user) {
 export async function getUser({ username }) {
   const record = await xata.db.users
     .filter({
-      username: username.trim(),
+      username: username,
     })
     .getMany();
 

@@ -79,6 +79,22 @@ app.get("/api/user", async (req, res) => {
   // const user = await getUser({ username: "heybran" });
 });
 
+app.get("/api/user/:username", async (req, res) => {
+  const { username } = req.params;
+  const user = await getUser({ username: username });
+
+  // this username already exists in database
+  if (user.length) {
+    res.status(200).json({ user: user[0] });
+  } else {
+    res.status(404).json({
+      error: {
+        message: "no this user",
+      },
+    });
+  }
+});
+
 app.post("/api/user/signout", async (req, res) => {
   res.clearCookie("user");
   res.status(200).send({ message: "Coolied cleared" });
@@ -88,6 +104,7 @@ app.post("/api/user/signout", async (req, res) => {
 app.post("/api/user/create", async (req, res) => {
   /** @type {import('./user.js').User} */
   const user = req.body;
+  console.log(user);
   const create = await createUser({
     password: "",
     avatarUrl: "",
