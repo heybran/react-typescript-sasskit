@@ -428,10 +428,15 @@ main {
   padding: 2rem 4rem;
 }
 
-button.disabled {
+button.disabled,
+button[disabled] {
   cursor: not-allowed;
-  pointer-events: none;
   filter: grayscale(0.9);
+}
+
+button.disabled:hover,
+button[disabled]:hover {
+  box-shadow: none;
 }
 
 .authenticating {
@@ -459,6 +464,16 @@ button.disabled {
   border: 2px solid #ddd;
   border-radius: 10px;
   padding: 12px 20px;
+  position: relative;
+}
+
+.input-field__error {
+  color: red;
+  position: absolute;
+  display: block;
+  right: 1rem;
+  bottom: 0.6rem;
+  font-size: 0.9em;
 }
 
 .input-field + * {
@@ -555,4 +570,25 @@ input:focus::placeholder {
 .register svg {
   width: 1.5rem;
   margin-left: 0.5em;
+}
+
+.spinner {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border: 2px solid #c2c7ce;
+  border-radius: 50%;
+  border-top-color: var(--text-gray);
+  animation: spin 1s linear infinite;
+  position: absolute;
+  right: 1rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
