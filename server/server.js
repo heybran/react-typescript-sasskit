@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import cookirParser from "cookie-parser";
 import path from "path";
 import { createUser, getUser, updateUser, deleteUser } from "./user.js";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -39,7 +40,6 @@ app.get(/^((?!\/api\/).)*$/, async (req, res) => {
 
 app.get("/api/user", async (req, res) => {
   const userCookie = req.cookies.user;
-
   if (!userCookie) {
     res.status(401).send("Unauthorized");
     return;
@@ -50,9 +50,10 @@ app.get("/api/user", async (req, res) => {
       console.error(`Error verify user JWT cookir`, err);
       res.status(401).send("Unauthorized");
     } else {
-      const { username } = decoded;
-      const user = await getUser({ username });
-      res.json({
+      // here decoded is string, username where we stored in cookie
+      // at /api/user/create route
+      const user = await getUser({ username: decoded });
+      res.status(200).json({
         username: user[0].username,
         avatarUrl: user[0].avatarUrl,
       });
@@ -104,7 +105,8 @@ app.post("/api/user/signout", async (req, res) => {
 app.post("/api/user/create", async (req, res) => {
   /** @type {import('./user.js').User} */
   const user = req.body;
-  console.log(user);
+  user.password = await bcrypt.hash(user.password, 10);
+
   const create = await createUser({
     password: "",
     avatarUrl: "",
