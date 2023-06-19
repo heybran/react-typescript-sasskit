@@ -47,9 +47,17 @@ export default function Register() {
     try {
       await fetch("/api/user/create", {
         method: "POST",
+        headers: {
+          /**
+            Server by default is expecting form data to be in application/x-www-form-urlencoded format,
+            if missing Content-Type application/json, server will receive an empty {} of req.body
+          */
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(user),
       });
       setStatus("success");
+      window.location.href = "/dashboard/account";
     } catch (error) {
       setStatus("typing");
       setError(error as ServerError);
