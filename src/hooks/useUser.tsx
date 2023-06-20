@@ -30,6 +30,7 @@ export default function useUser() {
           isLoggedIn: true,
         });
       } catch (error) {
+        console.log(error);
         setUser({
           ...user,
           username: "",
@@ -42,5 +43,5 @@ export default function useUser() {
     })();
   }, []);
 
-  return { isPending, user };
+  return { isPending, user, setUser };
 }
