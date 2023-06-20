@@ -3,7 +3,7 @@ import Button from "./Button";
 import SignupButton from "./Signup";
 
 export default function PricingCard({ plan }: { plan: string }) {
-  const user = useUserContext();
+  const { user } = useUserContext();
 
   return (
     <div className="plan">

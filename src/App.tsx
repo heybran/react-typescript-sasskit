@@ -12,11 +12,11 @@ import Dashboard from "./routes/Dashboard.tsx";
 import Register from "./routes/Register.tsx";
 
 export default function App() {
-  const { isPending, user } = useUser();
+  const { isPending, user, setUser } = useUser();
 
   if (!isPending) {
     return (
-      <UserContext.Provider value={user}>
+      <UserContext.Provider value={{ user, setUser }}>
         <Routes>
           <Route path="/" element={<Root />}>
             <Route index element={<Home />} />

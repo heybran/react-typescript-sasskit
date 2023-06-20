@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { Dispatch, SetStateAction, createContext, useContext } from "react";
 
 export interface User {
   username: string;
@@ -6,7 +6,14 @@ export interface User {
   isLoggedIn: boolean;
 }
 
-export const UserContext = createContext<User | undefined>(undefined);
+interface UserContextProps {
+  user: User;
+  setUser: Dispatch<SetStateAction<User>>;
+}
+
+export const UserContext = createContext<UserContextProps | undefined>(
+  undefined,
+);
 
 /**
  * Returns the user object from the UserContext.
@@ -14,11 +21,12 @@ export const UserContext = createContext<User | undefined>(undefined);
  * @returns {User} The user objec from the UserContext.
  */
 export function useUserContext() {
-  const user = useContext(UserContext);
+  const data = useContext(UserContext);
 
-  if (user === undefined) {
+  if (data === undefined) {
     throw new Error("useUserContext must be used with a UserContext");
   }
 
-  return user;
+  const { user, setUser } = data;
+  return { user, setUser };
 }

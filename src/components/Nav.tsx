@@ -4,7 +4,7 @@ import { useUserContext } from "../context/UserContext";
 import Button from "./Button";
 
 export default function Nav() {
-  const user = useUserContext();
+  const { user } = useUserContext();
   const navigate = useNavigate();
 
   const showDashboard = () => {
