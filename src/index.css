@@ -157,6 +157,7 @@ img {
   font-size: inherit;
   outline: none;
   font-size: 1.1em;
+  margin-top: 0;
 }
 
 .header-nav button {
@@ -188,12 +189,14 @@ img {
   max-width: 50%;
   text-align: center;
   margin: auto;
+  position: relative;
 }
 
 .user__avartar img {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
+  border: 2px solid var(--border-light-gray);
 }
 
 .user__details {
