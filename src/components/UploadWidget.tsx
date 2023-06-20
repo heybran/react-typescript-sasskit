@@ -1,6 +1,14 @@
 import { useEffect, useRef } from "react";
 
-export default function UploadWidget({ buttonText }: { buttonText: string }) {
+interface UploadWidgetProps {
+  buttonText: string;
+  onSuccess: (avatarUrl: string) => void;
+}
+
+export default function UploadWidget({
+  buttonText,
+  onSuccess,
+}: UploadWidgetProps) {
   const cloudinaryRef = useRef();
   const widgetRef = useRef();
   useEffect(() => {
@@ -17,7 +25,7 @@ export default function UploadWidget({ buttonText }: { buttonText: string }) {
       (error: any, result: any) => {
         if (result?.event === "success") {
           const avatarUrl = result.info.secure_url;
-          console.log(avatarUrl);
+          onSuccess(avatarUrl);
           console.log(error);
         }
       },
