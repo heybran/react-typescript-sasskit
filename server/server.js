@@ -130,6 +130,22 @@ app.post("/api/user/create", async (req, res) => {
   res.sendStatus(200);
 });
 
+app.post("/api/user/update", async (req, res) => {
+  const body = req.body;
+  const user = await getUser({ username: body.username });
+  const update = await updateUser({
+    id: user[0].id,
+    avatarUrl: body.avatarUrl,
+    password: body.password,
+  });
+
+  if (update.errors) {
+    res.status(500).json({ error: create.errors?.[0] });
+  } else {
+    res.status(200).json({ message: "user updated" });
+  }
+});
+
 app.post("/api/auth/github/callback", async (req, res) => {
   const { code } = req.body;
 
