@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-
-interface User {
-  username: string;
-  avatarUrl: string;
-  isLoggedIn: boolean;
-}
+import { User } from "../context/UserContext";
 
 export default function useUser() {
   const [user, setUser] = useState<User>({
     username: "",
     avatarUrl: "",
+    password: "",
     isLoggedIn: false,
   });
 
@@ -30,7 +26,6 @@ export default function useUser() {
           isLoggedIn: true,
         });
       } catch (error) {
-        console.log(error);
         setUser({
           ...user,
           username: "",
