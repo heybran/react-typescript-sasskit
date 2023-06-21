@@ -179,7 +179,7 @@ app.post("/api/user/login", async (req, res) => {
     return;
   }
 
-  const match = await bcrypt.compare(userSent.password, user.password);
+  const match = await bcrypt.compare(userSent.password, user[0].password);
   if (!match) {
     res.status(404).json({
       error: {
