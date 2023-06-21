@@ -7,6 +7,7 @@ export default function useUser() {
     avatarUrl: "",
     password: "",
     isLoggedIn: false,
+    subscription: "free",
   });
 
   const [isPending, setIsPending] = useState(true);
@@ -18,11 +19,12 @@ export default function useUser() {
           credentials: "include",
         });
 
-        const { username, avatarUrl } = await res.json();
+        const { username, avatarUrl, subscription } = await res.json();
         setUser({
           ...user,
           username,
           avatarUrl,
+          subscription,
           isLoggedIn: true,
         });
       } catch (error) {
@@ -30,6 +32,7 @@ export default function useUser() {
           ...user,
           username: "",
           avatarUrl: "",
+          subscription: "free",
           isLoggedIn: false,
         });
       } finally {

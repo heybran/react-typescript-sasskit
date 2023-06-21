@@ -5,6 +5,7 @@ export interface User {
   avatarUrl: string;
   password: string;
   isLoggedIn: boolean;
+  subscription: "free" | "standard" | "premium";
 }
 
 interface UserContextProps {
