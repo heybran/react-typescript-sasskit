@@ -170,6 +170,28 @@ app.post("/api/user/update", async (req, res) => {
   }
 });
 
+app.post("/api/user/login", async (req, res) => {
+  const userSent = req.body;
+  const user = await getUser({ username: userSent.username });
+  // this username already exists in database
+  if (!user.length) {
+    res.status(404).json({ message: "This user does not exist." });
+    return;
+  }
+
+  const match = await bcrypt.compare(userSent.password, user.password);
+  if (!match) {
+    res.status(404).json({
+      error: {
+        message: "no this user",
+      },
+    });
+    return;
+  }
+
+  res.status(200).json({ message: "log in success" });
+});
+
 app.post("/api/auth/github/callback", async (req, res) => {
   const { code } = req.body;
 

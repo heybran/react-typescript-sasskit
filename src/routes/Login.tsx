@@ -1,43 +1,17 @@
 import Input from "../components/Input";
 import { Link } from "react-router-dom";
 import { GitHubLoginButton } from "../components/GithubAuth";
-import { useState, KeyboardEvent, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
 type ServerError = {
   message: string;
   [key: string]: unknown;
 };
 
-export default function Register() {
-  const [isVerifyingUsername, setIsVerifyingUsername] = useState(false);
-  const [usernameExists, setUsernameExists] = useState(false);
+export default function Login() {
   const [status, setStatus] = useState("typing");
   const [user, setUser] = useState({ username: "", password: "" });
   const [error, setError] = useState<ServerError | null>(null);
-
-  let timeout: ReturnType<typeof setTimeout>;
-  const debounce = (e: KeyboardEvent<HTMLInputElement>) => {
-    const input = e.target as HTMLInputElement;
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      setIsVerifyingUsername(true);
-      verifyUsername(input.value.trim());
-    }, 500);
-  };
-
-  const verifyUsername = async (username: string) => {
-    // need to clear out error message
-    setUsernameExists(false);
-    const res = await fetch(`/api/user/${username}`);
-    if (res.ok) {
-      // this user exits in database
-      setUsernameExists(true);
-    } else {
-      setUsernameExists(false);
-    }
-
-    setIsVerifyingUsername(false);
-  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,7 +19,7 @@ export default function Register() {
     const formData = new FormData(e.target as HTMLFormElement);
     const user = Object.fromEntries(formData.entries());
     try {
-      await fetch("/api/user/create", {
+      const res = await fetch("/api/user/login", {
         method: "POST",
         headers: {
           /**
@@ -56,8 +30,13 @@ export default function Register() {
         },
         body: JSON.stringify(user),
       });
-      setStatus("success");
-      window.location.href = "/dashboard/account";
+
+      if (res.ok) {
+        setStatus("success");
+        window.location.href = "/dashboard/account";
+      } else {
+        console.log(res);
+      }
     } catch (error) {
       setStatus("typing");
       setError(error as ServerError);
@@ -66,24 +45,15 @@ export default function Register() {
 
   return (
     <div className="register">
-      <h1>Sign Up</h1>
+      <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
         <Input
           name="username"
           labelText="Username"
-          id="register-username"
+          id="login-username"
           placeholder="Your username"
-          spinner={isVerifyingUsername ? true : false}
-          onKeyUp={debounce}
           onChange={(e) =>
             setUser({ ...user, username: e.target.value.trim() })
-          }
-          errorMessage={
-            usernameExists ? (
-              <span className="input-field__error">
-                Username already exists.
-              </span>
-            ) : null
           }
         />
         <Input
@@ -91,14 +61,13 @@ export default function Register() {
             setUser({ ...user, password: e.target.value.trim() })
           }
           name="password"
+          type="password"
           labelText="Password"
-          id="register-password"
-          placeholder="Enter a password"
+          id="login-password"
+          placeholder="Enter a passwor"
         />
         <button
           disabled={
-            isVerifyingUsername ||
-            usernameExists ||
             status === "submitting" ||
             user.username === "" ||
             user.password === ""
@@ -106,13 +75,13 @@ export default function Register() {
           className="primary-button relative full-width"
           type="submit"
         >
-          Complete Sign Up
+          Sign In
         </button>
         {error !== null && <p className="submit-error">{error.message}</p>}
         <p className="submit-error"></p>
         <footer>
-          Already have an account?
-          <Link to="/login">Sign in</Link>
+          Do not have an account?
+          <Link to="/register">Sign up</Link>
         </footer>
       </form>
       <div className="divider">
