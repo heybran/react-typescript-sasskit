@@ -1,9 +1,35 @@
-import { useUserContext } from "../context/UserContext";
-import Button from "./Button";
+import { useState } from "react";
+import { User, useUserContext } from "../context/UserContext";
 import SignupButton from "./Signup";
+import Spinner from "./Spinner";
 
-export default function PricingCard({ plan }: { plan: string }) {
-  const { user } = useUserContext();
+export default function PricingCard({ plan }: { plan: User["subscription"] }) {
+  const { user, setUser } = useUserContext();
+  const [isChangingPlan, setIsChangingPlan] = useState(false);
+
+  const changePlan = async () => {
+    setIsChangingPlan(true); // we want to show a spinner inside the button
+
+    try {
+      const res = await fetch("/api/user/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // TODO: It will be easier if we can store the user id into our userContext
+        // so when we need to update user info, send along user id
+        body: JSON.stringify({ username: user.username, subscription: plan }),
+      });
+
+      if (res.ok) {
+        setUser({ ...user, subscription: plan });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsChangingPlan(false);
+    }
+  };
 
   return (
     <div className="plan">
@@ -25,10 +51,16 @@ export default function PricingCard({ plan }: { plan: string }) {
           : "$10.00 / month"}
       </div>
       {user.isLoggedIn ? (
-        <Button
-          text={plan.trim() === "free" ? "Current plan" : "Upgrade"}
-          theme={plan.trim() === "free" ? "disabled" : ""}
-        />
+        <button
+          className={
+            "primary-button relative " +
+            (plan.trim() === user.subscription ? "disabled" : "")
+          }
+          onClick={changePlan}
+        >
+          {plan.trim() === user.subscription ? "Current plan" : "Upgrade"}
+          {isChangingPlan ? <Spinner /> : null}
+        </button>
       ) : (
         <SignupButton />
       )}
