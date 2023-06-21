@@ -3,11 +3,13 @@ import { useEffect, useRef } from "react";
 interface UploadWidgetProps {
   buttonText: string;
   onSuccess: (avatarUrl: string) => void;
+  spinner?: boolean;
 }
 
 export default function UploadWidget({
   buttonText,
   onSuccess,
+  spinner,
 }: UploadWidgetProps) {
   const cloudinaryRef = useRef();
   const widgetRef = useRef();
@@ -34,7 +36,11 @@ export default function UploadWidget({
 
   return (
     // @ts-ignore
-    <button type="button" onClick={() => widgetRef.current.open()}>
+    <button
+      type="button"
+      onClick={() => widgetRef.current.open()}
+      className={spinner ? "loading" : ""}
+    >
       {buttonText}
     </button>
   );
