@@ -30,6 +30,8 @@
   --color-brand-primary: #6c63ff;
   --color-brand-secondary: #f6f0e8;
   --color-brand-primary-hover: #6c63ff;
+
+  --padding-button-large: 0.5rem 1rem;
 }
 
 @supports (top: env(safe-area-inset-top, 0)) {
@@ -55,6 +57,7 @@ a {
 
 img {
   max-width: 100%;
+  object-fit: cover;
 }
 
 .is-pending {
@@ -89,7 +92,6 @@ img {
   justify-content: flex-start;
   font-size: 2rem;
   font-weight: bold;
-  gap: 0.5rem;
 }
 
 .interio-header__logo-inner {
@@ -107,6 +109,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 0.2em;
 }
 
 .interio-header__logo-text span:first-child {
@@ -215,6 +218,7 @@ img {
 .user__detail .flex {
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .user__detail p {
@@ -402,7 +406,7 @@ button:focus-visible {
 .interio-header--dashboard {
   border-bottom: 1px solid var(--border-light-gray);
   padding-inline: 1rem;
-  grid-template-columns: calc(250px - 1rem) 50ch;
+  grid-template-columns: calc(250px - 1rem) 50ch 1fr;
 }
 
 .dashboard-nav__link {
@@ -435,6 +439,7 @@ button.disabled,
 button[disabled] {
   cursor: not-allowed;
   filter: grayscale(0.9);
+  pointer-events: none;
 }
 
 button.disabled:hover,
@@ -594,4 +599,65 @@ input:focus::placeholder {
   to {
     transform: rotate(360deg);
   }
+}
+
+.user__details input {
+  border: 2px solid var(--border-light-gray);
+  padding: 0.6em 0.8em;
+  border-radius: 6px;
+  margin-top: 0;
+}
+
+.flex button {
+  width: auto;
+}
+
+.user__detail .flex + .flex {
+  margin-top: 4px;
+}
+
+.secondary-button {
+  background: var(--border-light-gray);
+  padding: var(--padding-button-large);
+  border-radius: 4px;
+  border: 2px solid var(--border-light-gray);
+}
+
+.secondary-button:hover {
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.relative {
+  position: relative;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+button:has(.spinner) {
+  pointer-events: none;
+}
+
+[type="password"] + button {
+  width: 15em;
+}
+
+.interio-header__button-avatar {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-left: auto;
+  border-radius: 8px;
+}
+
+.interio-header__button-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }

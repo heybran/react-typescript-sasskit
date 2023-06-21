@@ -38,17 +38,10 @@ export async function getUser({ username }) {
  * @param {String} options.id
  * @param {String} [options.password]
  * @param {String} [options.avatarUrl]
+ * @param {String} [options.subscription]
  */
-export async function updateUser({ id, password, avatarUrl }) {
-  let updateData = {};
-
-  if (password) {
-    updateData.password = password;
-  }
-
-  if (avatarUrl) {
-    updateData.avatarUrl = avatarUrl;
-  }
+export async function updateUser(data) {
+  const { id, ...updateData } = data;
 
   const update = await xata.db.users.update(id, updateData);
   return update;

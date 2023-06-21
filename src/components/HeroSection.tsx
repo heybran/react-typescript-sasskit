@@ -3,7 +3,7 @@ import buildingWebsitesSVG from "../assets/building_websites.svg";
 import { useUserContext } from "../context/UserContext";
 
 export default function HeroSection() {
-  const user = useUserContext();
+  const { user } = useUserContext();
 
   return (
     <div className="hero">

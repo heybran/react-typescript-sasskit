@@ -39,7 +39,16 @@ app.get(/^((?!\/api\/).)*$/, async (req, res) => {
 });
 
 app.get("/api/user", async (req, res) => {
+  // for debug locally
+  // res.status(200).json({
+  //   username: 'test5',
+  //   avatarUrl: '',
+  //   subscription: 'standard'
+  // });
+  // return;
+
   const userCookie = req.cookies.user;
+  console.log(userCookie);
   if (!userCookie) {
     res.status(401).send("Unauthorized");
     return;
@@ -133,11 +142,26 @@ app.post("/api/user/create", async (req, res) => {
 app.post("/api/user/update", async (req, res) => {
   const body = req.body;
   const user = await getUser({ username: body.username });
-  const update = await updateUser({
+
+  const updateData = {
     id: user[0].id,
-    avatarUrl: body.avatarUrl,
-    password: body.password,
-  });
+  };
+
+  if (body.password) {
+    body.password = await bcrypt.hash(user.password, 10);
+    updateData.password = body.password;
+  }
+
+  if (body.avatarUrl) {
+    updateData.avatarUrl = body.avatarUrl;
+  }
+
+  if (body.subscription) {
+    updateData.subscription = body.subscription;
+  }
+
+  const update = await updateUser(updateData);
+  console.log(update);
 
   if (update.errors) {
     res.status(500).json({ error: create.errors?.[0] });
