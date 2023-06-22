@@ -67,6 +67,9 @@ export default function Register() {
   return (
     <div className="register">
       <h1>Sign Up</h1>
+      <Link to="/" className="back-to-home">
+        Back
+      </Link>
       <form onSubmit={handleSubmit}>
         <Input
           name="username"

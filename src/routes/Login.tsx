@@ -43,6 +43,9 @@ export default function Login() {
   return (
     <div className="register">
       <h1>Sign In</h1>
+      <Link to="/" className="back-to-home">
+        Back
+      </Link>
       <form onSubmit={handleSubmit}>
         <Input
           name="username"
@@ -61,7 +64,7 @@ export default function Login() {
           type="password"
           labelText="Password"
           id="login-password"
-          placeholder="Enter a passwor"
+          placeholder="Your password"
         />
         <button
           disabled={

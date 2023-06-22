@@ -24,12 +24,12 @@ export default function Dashboard() {
   return (
     <>
       <DashboardHeader />
-      <div className="dashboard">
+      <main className="dashboard">
         <DashboardNav />
-        <main>
+        <div className="dashboard-main">
           <Outlet />
-        </main>
-      </div>
+        </div>
+      </main>
     </>
   );
 }

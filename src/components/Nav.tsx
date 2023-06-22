@@ -22,7 +22,14 @@ export default function Nav() {
       {user.isLoggedIn ? (
         <Button onClick={showDashboard} text="Dashboard" theme="small" />
       ) : null}
-      {!user.isLoggedIn ? <SignupButton /> : null}
+      {!user.isLoggedIn ? (
+        <div className="header-nav__buttons-group">
+          <NavLink className="header-nav__link" to="/login">
+            Sign in
+          </NavLink>
+          <SignupButton />
+        </div>
+      ) : null}
     </nav>
   );
 }

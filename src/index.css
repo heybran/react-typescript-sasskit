@@ -163,10 +163,6 @@ img {
   margin-top: 0;
 }
 
-.header-nav button {
-  margin-left: auto;
-}
-
 .header-nav__link {
   text-decoration: none;
   color: inherit;
@@ -394,7 +390,8 @@ button:focus-visible {
   border-right: 1px solid var(--border-light-gray);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--header-height));
+  height: 100vh;
+  padding-top: calc(1rem + var(--header-height));
   width: 250px;
   max-width: 250px;
 }
@@ -407,6 +404,11 @@ button:focus-visible {
   border-bottom: 1px solid var(--border-light-gray);
   padding-inline: 1rem;
   grid-template-columns: calc(250px - 1rem) 50ch 1fr;
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 10;
 }
 
 .dashboard-nav__link {
@@ -431,8 +433,11 @@ button:focus-visible {
   background-color: #f1f1f1;
 }
 
-main {
+.dashboard-main {
   padding: 2rem 4rem;
+  padding-top: calc(2rem + var(--header-height));
+  height: 100vh;
+  overflow: auto;
 }
 
 button.disabled,
@@ -672,4 +677,18 @@ button:has(.spinner) {
 
 .error {
   color: red;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.back-to-home {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+}
+
+.header-nav__buttons-group :not(:first-child) {
+  margin-left: 0.5em;
 }
