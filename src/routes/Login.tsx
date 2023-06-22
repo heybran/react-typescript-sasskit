@@ -3,15 +3,10 @@ import { Link } from "react-router-dom";
 import { GitHubLoginButton } from "../components/GithubAuth";
 import { useState, FormEvent } from "react";
 
-type ServerError = {
-  message: string;
-  [key: string]: unknown;
-};
-
 export default function Login() {
   const [status, setStatus] = useState("typing");
   const [user, setUser] = useState({ username: "", password: "" });
-  const [error, setError] = useState<ServerError | null>(null);
+  const [error, setError] = useState<String | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,11 +30,13 @@ export default function Login() {
         setStatus("success");
         window.location.href = "/dashboard/account";
       } else {
-        console.log(res);
+        setStatus("typing");
+        const serverError = await res.json();
+        setError(serverError.message);
       }
-    } catch (error) {
+    } catch (err: any) {
       setStatus("typing");
-      setError(error as ServerError);
+      setError(err.message ?? "Something went wrong, please try again.");
     }
   };
 
@@ -77,8 +74,7 @@ export default function Login() {
         >
           Sign In
         </button>
-        {error !== null && <p className="submit-error">{error.message}</p>}
-        <p className="submit-error"></p>
+        {error !== null ? <p className="error">{error}</p> : null}
         <footer>
           Do not have an account?
           <Link to="/register">Sign up</Link>

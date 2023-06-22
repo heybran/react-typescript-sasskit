@@ -182,12 +182,17 @@ app.post("/api/user/login", async (req, res) => {
   const match = await bcrypt.compare(userSent.password, user[0].password);
   if (!match) {
     res.status(404).json({
-      error: {
-        message: "no this user",
-      },
+      message: "Wrong password, please try again.",
     });
     return;
   }
+
+  const userCookie = jwt.sign(userSent.username, secret);
+  res.cookie("user", userCookie, {
+    path: "/",
+    maxAge: 24 * 60 * 60 * 1000 * 30,
+    httpOnly: true,
+  });
 
   res.status(200).json({ message: "log in success" });
 });
