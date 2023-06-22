@@ -65,6 +65,8 @@ app.get("/api/user", async (req, res) => {
       res.status(200).json({
         username: user[0].username,
         avatarUrl: user[0].avatarUrl,
+        password: Boolean(user[0].password),
+        subscription: user[0].subscription,
       });
     }
   });
@@ -195,6 +197,23 @@ app.post("/api/user/login", async (req, res) => {
   });
 
   res.status(200).json({ message: "log in success" });
+});
+
+app.post("/api/user/verify-password", async (req, res) => {
+  const userSent = req.body;
+  const user = await getUser({ username: userSent.username });
+  const match = await bcrypt.compare(userSent.password, user[0].password);
+  if (!match) {
+    // current password entered by user does not match the one in database
+    res.status(401).json({
+      message: "Current password is not correct.",
+    });
+    return;
+  }
+
+  res.status(200).json({
+    message: "Current password is correct.",
+  });
 });
 
 app.post("/api/auth/github/callback", async (req, res) => {
