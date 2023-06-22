@@ -333,7 +333,8 @@ button:focus-visible {
 }
 
 .primary-button:hover {
-  box-shadow: rgb(164 161 204 / 42%) 0px 0px 0px 3px;
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
 }
 
 .pricing {
@@ -523,7 +524,7 @@ input:focus::placeholder {
 
 .register {
   min-height: 100vh;
-  max-width: 800px;
+  max-width: 600px;
   margin-inline: auto;
   padding: 4rem;
 }
