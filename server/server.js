@@ -150,7 +150,7 @@ app.post("/api/user/update", async (req, res) => {
   };
 
   if (body.password) {
-    body.password = await bcrypt.hash(user.password, 10);
+    body.password = await bcrypt.hash(user[0].password, 10);
     updateData.password = body.password;
   }
 
