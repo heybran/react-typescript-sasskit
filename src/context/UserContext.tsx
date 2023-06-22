@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, createContext, useContext } from "react";
 export interface User {
   username: string;
   avatarUrl: string;
-  password: string;
+  password: boolean;
   isLoggedIn: boolean;
   subscription: "free" | "standard" | "premium";
 }

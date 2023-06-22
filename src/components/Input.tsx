@@ -6,7 +6,7 @@ interface InputProps {
   labelText: string;
   type?: string;
   name: string;
-  placeholder: string;
+  placeholder?: string;
   spinner?: boolean;
   onKeyUp?: (e: KeyboardEvent<HTMLInputElement>) => void;
   errorMessage?: ReactNode | null;

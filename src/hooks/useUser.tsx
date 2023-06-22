@@ -5,7 +5,7 @@ export default function useUser() {
   const [user, setUser] = useState<User>({
     username: "",
     avatarUrl: "",
-    password: "",
+    password: false,
     isLoggedIn: false,
     subscription: "free",
   });
@@ -19,12 +19,14 @@ export default function useUser() {
           credentials: "include",
         });
 
-        const { username, avatarUrl, subscription } = await res.json();
+        const { username, avatarUrl, subscription, password } =
+          await res.json();
         setUser({
           ...user,
           username,
           avatarUrl,
           subscription,
+          password,
           isLoggedIn: true,
         });
       } catch (error) {
@@ -33,6 +35,7 @@ export default function useUser() {
           username: "",
           avatarUrl: "",
           subscription: "free",
+          password: false,
           isLoggedIn: false,
         });
       } finally {
