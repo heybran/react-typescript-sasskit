@@ -1,19 +1,13 @@
-const GITHUB_CLIENT_ID = "0b3d7ed9ff20b068f060";
-const GITHUB_CALLBACK_URL = location.origin + "/auth/github/callback";
-
-const githubOAuthURL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${GITHUB_CALLBACK_URL}&scope=user`;
+import { useNavigate } from "react-router-dom";
 
 const SignupButton = () => {
-  const handleSignup = () => {
-    window.location.href = githubOAuthURL;
-  };
-
+  const navigate = useNavigate();
   return (
     <button
       className="header-nav__button header-nav__button--signin"
-      onClick={handleSignup}
+      onClick={() => navigate("/register")}
     >
-      Start Free Trial
+      Get Started
     </button>
   );
 };

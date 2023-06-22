@@ -35,9 +35,9 @@ export default function UploadWidget({
   }, []);
 
   return (
-    // @ts-ignore
     <button
       type="button"
+      // @ts-ignore
       onClick={() => widgetRef.current.open()}
       className={spinner ? "loading" : ""}
     >
