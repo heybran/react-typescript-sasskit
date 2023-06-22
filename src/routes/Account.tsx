@@ -1,16 +1,19 @@
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import UploadWidget from "../components/UploadWidget";
 import defaultAvatar from "../assets/default_avatar.svg";
 import { useUserContext } from "../context/UserContext";
 import Spinner from "../components/Spinner";
+import Input from "../components/Input";
 
 export default function Account() {
   const { user, setUser } = useUserContext();
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isSettingPassword, setIsSettingPassword] = useState(false);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [updatePasswordError, setUpdatePasswordError] = useState<string | null>(
+    null,
+  );
 
   const handleOnSuccess = async (avatarUrl: string) => {
     setIsUploadingAvatar(true);
@@ -33,28 +36,64 @@ export default function Account() {
     }
   };
 
-  const prepareSetPassword = () => {
-    setIsSettingPassword(true);
-  };
-
-  const updatePassword = async () => {
+  const updatePassword = async (e: FormEvent<HTMLFormElement>) => {
+    let next = false;
+    e.preventDefault();
+    console.log(e);
     setIsUpdatingPassword(true); // we want to show a spinner inside the button
-    const password = (
-      passwordInputRef.current as HTMLInputElement
-    ).value.trim();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const passwords = Object.fromEntries(formData.entries());
+    try {
+      const isCurrentPasswordCorrectRes = await fetch(
+        "/api/user/verify-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: user.username,
+            password: passwords["current-password"],
+          }),
+        },
+      );
+
+      if (isCurrentPasswordCorrectRes.ok) {
+        next = true;
+      } else {
+        setIsUpdatingPassword(false);
+        const error = await isCurrentPasswordCorrectRes.json();
+        setUpdatePasswordError(error.message);
+      }
+    } catch (error) {
+      setIsUpdatingPassword(false);
+      setUpdatePasswordError("Something went wrong, please try again.");
+    }
+
+    if (!next) {
+      return;
+    }
 
     try {
-      await fetch("/api/user/update", {
+      const res = await fetch("/api/user/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         // TODO: It will be easier if we can store the user id into our userContext
         // so when we need to update user info, send along user id
-        body: JSON.stringify({ username: user.username, password }),
+        body: JSON.stringify({
+          username: user.username,
+          password: passwords["new-password"],
+        }),
       });
 
-      setUser({ ...user, password });
+      if (res.ok) {
+        setUpdatePasswordError(null);
+        setUser({ ...user, password: true });
+      } else {
+        setUpdatePasswordError("Something went wrong, please try again.");
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -83,36 +122,57 @@ export default function Account() {
           </div>
           <p>{user.username}</p>
         </li>
-        <li className="user__detail">
+        <li className="user__detail user__detail--password">
           <div className="flex">
             <strong>Password</strong>
           </div>
-          <div className="flex">
-            {user.password || isSettingPassword ? (
-              <>
-                <input
-                  id="user-password"
-                  type="password"
-                  ref={passwordInputRef}
-                />
+          {isSettingPassword ? (
+            <form onSubmit={updatePassword}>
+              <Input
+                id="current-password"
+                labelText="Current password"
+                placeholder="Current password"
+                type="password"
+                name="current-password"
+              />
+              <Input
+                id="new-password"
+                labelText="New password"
+                placeholder="New password"
+                type="password"
+                name="new-password"
+              />
+              <div className="flex">
                 <button
-                  className="primary-button relative"
-                  onClick={updatePassword}
+                  className="primary-button relative half-width"
+                  type="submit"
                 >
                   Update
                   {isUpdatingPassword ? <Spinner /> : null}
                 </button>
-              </>
-            ) : (
-              <button
-                className="secondary-button full-width"
-                type="button"
-                onClick={prepareSetPassword}
-              >
-                Set your password
-              </button>
-            )}
-          </div>
+                <button
+                  className="secondary-button half-width"
+                  onClick={() => (
+                    setIsSettingPassword(false), setUpdatePasswordError(null)
+                  )}
+                >
+                  Cancel
+                </button>
+              </div>
+              {updatePasswordError !== null ? (
+                <p className="error">{updatePasswordError}</p>
+              ) : null}
+            </form>
+          ) : null}
+          {!isSettingPassword ? (
+            <button
+              className="secondary-button full-width"
+              type="button"
+              onClick={() => setIsSettingPassword(true)}
+            >
+              {user.password ? "Change" : "Set"} your password
+            </button>
+          ) : null}
         </li>
         <li className="user__detail">
           <div className="flex">

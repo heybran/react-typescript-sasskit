@@ -601,7 +601,7 @@ input:focus::placeholder {
   }
 }
 
-.user__details input {
+.user__details input:not(.input-field input) {
   border: 2px solid var(--border-light-gray);
   padding: 0.6em 0.8em;
   border-radius: 6px;
@@ -616,10 +616,14 @@ input:focus::placeholder {
   margin-top: 4px;
 }
 
+.user__detail--password .flex + * {
+  margin-top: 6px;
+}
+
 .secondary-button {
   background: var(--border-light-gray);
   padding: var(--padding-button-large);
-  border-radius: 4px;
+  border-radius: 0.5rem;
   border: 2px solid var(--border-light-gray);
 }
 
@@ -630,6 +634,10 @@ input:focus::placeholder {
 
 .full-width {
   width: 100% !important;
+}
+
+.half-width {
+  width: 50% !important;
 }
 
 .relative {
@@ -660,4 +668,8 @@ button:has(.spinner) {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+.error {
+  color: red;
 }

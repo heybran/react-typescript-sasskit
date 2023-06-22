@@ -108,8 +108,7 @@ export default function Register() {
         >
           Complete Sign Up
         </button>
-        {error !== null && <p className="submit-error">{error.message}</p>}
-        <p className="submit-error"></p>
+        {error !== null && <p className="error">{error.message}</p>}
         <footer>
           Already have an account?
           <Link to="/login">Sign in</Link>
