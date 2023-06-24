@@ -1,0 +1,70 @@
+/*
+    Most of codes are taken from this tutorials: https://web.dev/building-a-dialog-component/
+    All credits goes to Adam Argyle.
+*/
+.dialog {
+  display: grid;
+  border-width: 0;
+  /*
+        The dialog defaults to delegating its size to its contents,
+        which is generally great.
+        My goal here is to constrain the max-inline-size to a readable size 60ch or 90% of the viewport width.
+        This ensures the dialog won't go edge to edge on a mobile device,
+        and won't be so wide on a desktop screen that it's hard to read.
+    */
+  max-inline-size: min(90vw, 60ch);
+  max-block-size: min(80vh, 100%);
+  /*
+        Then I add a max-block-size so the dialog won't exceed the height of the page.
+        This also means that we'll need to specify where the scrollable area of the dialog is,
+        in case it's a tall dialog element.
+    */
+  max-block-size: min(80dvb, 100%);
+  overflow: hidden;
+  /*
+        The following styles fix the dialog element to the window,
+        stretching it to each corner, and uses margin: auto to center the content:
+    */
+  margin: auto;
+  padding: 0;
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-important);
+  /**
+        Last, add some flair to the dialog so it looks like a soft surface sitting far above the page.
+        The softness is achieved by rounding the corners of the dialog.
+        The depth is achieved with one of Open Props’ carefully crafted shadow props.
+    */
+  border-radius: var(--border-radius-dialog);
+  box-shadow: rgba(37, 38, 39, 0.03) 0px -1px 2px 0px,
+    rgba(37, 38, 39, 0.04) 0px 3px 2px -2px,
+    rgba(37, 38, 39, 0.04) 0px 7px 5px -2px,
+    rgba(37, 38, 39, 0.05) 0px 12px 10px -2px,
+    rgba(37, 38, 39, 0.06) 0px 22px 18px -2px,
+    rgba(37, 38, 39, 0.07) 0px 41px 33px -2px,
+    rgba(37, 38, 39, 0.08) 0px 100px 80px -2px;
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(2px);
+  transition: backdrop-filter 0.5s ease;
+}
+
+dialog:not([open]) {
+  pointer-events: none;
+  opacity: 0;
+}
+
+dialog[open] {
+  animation: slide-in-up 0.5s ease forwards;
+}
+
+html:has(dialog[open]) .dashboard-main {
+  overflow: hidden;
+}
+
+@keyframes slide-in-up {
+  0% {
+    transform: translateY(100%);
+  }
+}
