@@ -48,7 +48,6 @@ app.get("/api/user", async (req, res) => {
   // return;
 
   const userCookie = req.cookies.user;
-  console.log(userCookie);
   if (!userCookie) {
     res.status(401).send("Unauthorized");
     return;
@@ -124,13 +123,11 @@ app.post("/api/user/create", async (req, res) => {
     ...user,
   });
 
-  console.log(create);
   if (create.errors) {
     res.status(500).json({ error: create.errors[0] });
     return;
   }
 
-  console.log("user created");
   const userCookie = jwt.sign(user.username, secret);
   res.cookie("user", userCookie, {
     path: "/",
@@ -163,7 +160,6 @@ app.post("/api/user/update", async (req, res) => {
   }
 
   const update = await updateUser(updateData);
-  console.log(update);
 
   if (update.errors) {
     res.status(500).json({ error: create.errors?.[0] });
@@ -214,6 +210,21 @@ app.post("/api/user/verify-password", async (req, res) => {
   res.status(200).json({
     message: "Current password is correct.",
   });
+});
+
+app.post("/api/user/delete", async (req, res) => {
+  const { username } = req.body;
+  /** @type{import('./types.js').User}*/
+  const user = await getUser({ username });
+  /** @type{import('./types.js').User | null}*/
+  const deleteData = await deleteUser(user[0].id);
+  if (!deleteData) {
+    res.status(422).json({ message: "User account could not be deleted." });
+    return;
+  }
+
+  res.clearCookie("user");
+  res.status(200).json({ message: "User deleted." });
 });
 
 app.post("/api/auth/github/callback", async (req, res) => {
