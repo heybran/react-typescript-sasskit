@@ -22,6 +22,9 @@
   --size-icon-small: 16px;
   --size-icon-medium: 24px;
 
+  --layer-important: 2147483647;
+  --border-radius-dialog: 16px;
+
   --safe-area-top: 0;
   --safe-area-bottom: 0;
   --safe-area-left: 0;
@@ -32,6 +35,9 @@
   --color-brand-primary-hover: #6c63ff;
 
   --padding-button-large: 0.5rem 1rem;
+
+  --border-radius-button: 0.5rem;
+  --color-danger: #c62d49;
 }
 
 @supports (top: env(safe-area-inset-top, 0)) {
@@ -53,6 +59,10 @@ body {
 
 a {
   color: inherit;
+}
+
+menu {
+  padding: 0;
 }
 
 img {
@@ -185,7 +195,7 @@ img {
 }
 
 .user__avartar {
-  max-width: 50%;
+  max-width: 30%;
   text-align: center;
   margin: auto;
   position: relative;
@@ -267,6 +277,7 @@ button {
   background-color: transparent;
   cursor: pointer;
   transition: border-color 0.25s;
+  line-height: 1.75rem;
 }
 
 button:focus,
@@ -310,7 +321,7 @@ button:focus-visible {
 }
 
 .primary-button {
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius-button, 0.5rem);
   border: 2px solid var(--color-brand-primary);
   transition-duration: 300ms;
   transition-property: color, background-color, border-color,
@@ -655,6 +666,7 @@ input:focus::placeholder {
 }
 
 button:has(.spinner) {
+  position: relative;
   pointer-events: none;
 }
 
@@ -692,4 +704,72 @@ button:has(.spinner) {
 
 .header-nav__buttons-group :not(:first-child) {
   margin-left: 0.5em;
+}
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--background-light-grey);
+  z-index: 20;
+  display: grid;
+  place-content: center;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+}
+
+.loading div {
+  width: 1rem;
+  height: 1rem;
+  margin: 2rem 0.3rem;
+  background: #979fd0;
+  border-radius: 50%;
+  animation: 0.9s bounce infinite alternate;
+}
+
+.loading div:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.loading div:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+@keyframes bounce {
+  to {
+    opacity: 0.3;
+    transform: translate3d(0, -1rem, 0);
+  }
+}
+
+h2:has(+ p) {
+  margin-block-start: 1em;
+  margin-block-end: 0;
+}
+
+.button-danger {
+  border: 2px solid var(--color-danger);
+  color: #c62d49;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-button);
+}
+
+.button-danger:hover {
+  background: #fcebee;
+}
+
+form[method="dialog"] {
+  padding: 0.5rem 1.5rem;
+}
+
+form[method="dialog"] menu {
+  display: flex;
+  gap: 1rem;
 }
