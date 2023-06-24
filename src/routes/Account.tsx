@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import UploadWidget from "../components/UploadWidget";
 import defaultAvatar from "../assets/default_avatar.svg";
 import { useUserContext } from "../context/UserContext";
 import Spinner from "../components/Spinner";
 import Input from "../components/Input";
+import Dialog from "../components/Dialog";
 
 export default function Account() {
   const { user, setUser } = useUserContext();
@@ -12,6 +13,10 @@ export default function Account() {
   const [isSettingPassword, setIsSettingPassword] = useState(false);
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [updatePasswordError, setUpdatePasswordError] = useState<string | null>(
+    null,
+  );
+  const [isDeleteAccount, setIsDeleteAccount] = useState(false);
+  const [deleteAccountError, setDeleteAccountError] = useState<string | null>(
     null,
   );
 
@@ -101,6 +106,35 @@ export default function Account() {
     }
   };
 
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+
+  /**
+   * TODO: Does button type="submit" auto close dialog?
+   */
+  const confirmDeleteAccount = async () => {
+    setIsDeleteAccount(true);
+    try {
+      const res = await fetch("/api/user/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: user.username }),
+      });
+
+      if (res.ok) {
+        window.location.href = "/";
+      } else {
+        const error = await res.json();
+        setIsDeleteAccount(false);
+        setDeleteAccountError(error.message);
+      }
+    } catch (err: any) {
+      setIsDeleteAccount(false);
+      setDeleteAccountError(err?.message);
+    }
+  };
+
   return (
     <div className="user">
       <div className="user__avartar">
@@ -184,6 +218,54 @@ export default function Account() {
           <p className="capitalize">{user.subscription}</p>
         </li>
       </ul>
+      <section id="delete-account">
+        <h2>Delete account</h2>
+        <p>
+          This will permanently delete your account and all of its data. You
+          will not be able to reactivate this account.
+        </p>
+        <button
+          aria-busy="false"
+          type="button"
+          className="button-danger"
+          onClick={() => (dialogRef.current as HTMLDialogElement).showModal()}
+        >
+          Delete my account
+          {isDeleteAccount ? <Spinner></Spinner> : null}
+        </button>
+        {deleteAccountError ? (
+          <p className="error">{deleteAccountError}</p>
+        ) : null}
+        <Dialog ref={dialogRef} ariaLabel="Delete my account">
+          <form method="dialog">
+            <p id="delete-my-account">
+              Are you sure you want to delete your account?
+            </p>
+            <footer>
+              <menu>
+                <button
+                  autoFocus
+                  className="secondary-button"
+                  type="button"
+                  onClick={() =>
+                    (dialogRef.current as HTMLDialogElement).close("cancel")
+                  }
+                >
+                  Cancel
+                </button>
+                <button
+                  className="primary-button"
+                  type="submit"
+                  value="confirm"
+                  onClick={confirmDeleteAccount}
+                >
+                  Confirm
+                </button>
+              </menu>
+            </footer>
+          </form>
+        </Dialog>
+      </section>
     </div>
   );
 }
