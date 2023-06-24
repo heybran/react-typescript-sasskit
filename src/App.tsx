@@ -15,24 +15,31 @@ import Login from "./routes/Login.tsx";
 export default function App() {
   const { isPending, user, setUser } = useUser();
 
-  if (!isPending) {
-    return (
-      <UserContext.Provider value={{ user, setUser }}>
-        <Routes>
-          <Route path="/" element={<Root />}>
-            <Route index element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="pricing" element={<Pricing />} />
-          </Route>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route path="account" element={<Account />} />
-            <Route path="pricing" element={<Pricing />} />
-          </Route>
-          <Route path="/auth/github/callback" element={<GitHubAuth />} />
-        </Routes>
-      </UserContext.Provider>
-    );
-  }
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {isPending ? (
+        <div className="loading-container">
+          <div className="loading">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      ) : null}
+      <Routes>
+        <Route path="/" element={<Root />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="pricing" element={<Pricing />} />
+        </Route>
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route path="account" element={<Account />} />
+          <Route path="pricing" element={<Pricing />} />
+        </Route>
+        <Route path="/auth/github/callback" element={<GitHubAuth />} />
+      </Routes>
+    </UserContext.Provider>
+  );
 }
