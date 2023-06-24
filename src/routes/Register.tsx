@@ -108,6 +108,7 @@ export default function Register() {
             user.username === "" ||
             user.password === ""
           }
+          aria-busy={status === "submitting"}
           className="primary-button relative full-width"
           type="submit"
         >
