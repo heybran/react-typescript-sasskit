@@ -138,7 +138,8 @@ export default function Account() {
 
   const twoFactorAuthRef = useRef<HTMLDialogElement>(null);
   const onTwoFactorAuthSuccess = () => {
-    console.log("success");
+    console.log("2fa enabled.");
+    twoFactorAuthRef.current?.close();
   };
 
   return (
