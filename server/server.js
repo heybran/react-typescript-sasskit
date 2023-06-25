@@ -6,10 +6,12 @@ import cookirParser from "cookie-parser";
 import path from "path";
 import { createUser, getUser, updateUser, deleteUser } from "./user.js";
 import bcrypt from "bcrypt";
+import speakeasy from "speakeasy";
+import QRCode from "qrcode";
 
 dotenv.config();
 
-const secret = process.env.JWT_SECRET;
+const jwtSecret = process.env.JWT_SECRET;
 const app = express();
 
 app.use(
@@ -27,7 +29,7 @@ app.use(
 
 app.use(express.json());
 
-app.use(cookirParser(secret));
+app.use(cookirParser(jwtSecret));
 
 // Serve static files from the ./build folder
 app.use(express.static("build"));
@@ -36,6 +38,74 @@ app.use(express.static("build"));
 app.get(/^((?!\/api\/).)*$/, async (req, res) => {
   const indexPath = path.resolve(process.cwd(), "build", "index.html");
   res.sendFile(indexPath);
+});
+
+// When user enable 2FA auth on their dashboard,
+// send a POST request from client to server to generate a secret for that user
+app.post("/api/2fa/create", async (req, res) => {
+  const { username } = req.body;
+  // Returns an object with secret.ascii, secret.hex, and secret.base32.
+  // Also returns secret.otpauth_url, which we'll use later.
+  const secret = speakeasy.generateSecret();
+  // Now, we want to make sure that this secret works by
+  // validating the token that the user gets from it for the first time.
+  // In other words, we don't want to set this as the user's secret key just yet,
+  // we first want to verify their token for the first time.
+  // We need to persist the secret so that we can use it for token validation later.
+  const user = await getUser({ username });
+  const update = await updateUser({
+    id: user[0].id,
+    tempSecret: secret.base32,
+  });
+
+  // Next, we'll want to display a QR code to the user so they can scan in the secret into their app.
+  // Google Authenticator and similar apps take in a QR code that
+  // holds a URL with the protocol otpauth://,
+  // which you get automatically from secret.otpauth_url.
+  const otpauthUrl = speakeasy.otpauthURL({
+    secret: secret.base32,
+    // The name displayed in the Google Authenticator app
+    // after scanning a QR code
+    label: user[0].username,
+    issuer: "React SassKit",
+  });
+  const qrDataUrl = await new Promise((resolve, reject) => {
+    QRCode.toDataURL(otpauthUrl, (err, dataUrl) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(dataUrl);
+      }
+    });
+  });
+
+  res.status(201).json({ qrDataUrl });
+});
+
+app.post("/api/2fa/verify", async (req, res) => {
+  const { username, token } = req.body;
+  const user = await getUser({ username });
+  console.log(user);
+  console.log(token);
+  const verified = speakeasy.totp.verify({
+    secret: user[0].tempSecret,
+    encoding: "base32",
+    token,
+  });
+
+  console.log(verified);
+
+  if (!verified) {
+    res.status(422).json({ message: "Wrong token." });
+    return;
+  } else {
+    const update = await updateUser({
+      id: user[0].id,
+      finalSecret: user[0].tempSecret,
+      "2fa": true,
+    });
+    console.log(update);
+  }
 });
 
 app.get("/api/user", async (req, res) => {
@@ -53,7 +123,7 @@ app.get("/api/user", async (req, res) => {
     return;
   }
 
-  jwt.verify(userCookie, secret, async (err, decoded) => {
+  jwt.verify(userCookie, jwtSecret, async (err, decoded) => {
     if (err) {
       console.error(`Error verify user JWT cookir`, err);
       res.status(401).send("Unauthorized");
@@ -128,7 +198,7 @@ app.post("/api/user/create", async (req, res) => {
     return;
   }
 
-  const userCookie = jwt.sign(user.username, secret);
+  const userCookie = jwt.sign(user.username, jwtSecret);
   res.cookie("user", userCookie, {
     path: "/",
     maxAge: 24 * 60 * 60 * 1000 * 30,
@@ -185,7 +255,7 @@ app.post("/api/user/login", async (req, res) => {
     return;
   }
 
-  const userCookie = jwt.sign(userSent.username, secret);
+  const userCookie = jwt.sign(userSent.username, jwtSecret);
   res.cookie("user", userCookie, {
     path: "/",
     maxAge: 24 * 60 * 60 * 1000 * 30,
