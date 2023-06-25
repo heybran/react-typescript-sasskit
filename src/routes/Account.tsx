@@ -6,6 +6,7 @@ import { useUserContext } from "../context/UserContext";
 import Spinner from "../components/Spinner";
 import Input from "../components/Input";
 import Dialog from "../components/Dialog";
+import TwoFactorAuth from "../components/TwoFactorAuth";
 
 export default function Account() {
   const { user, setUser } = useUserContext();
@@ -135,6 +136,11 @@ export default function Account() {
     }
   };
 
+  const twoFactorAuthRef = useRef<HTMLDialogElement>(null);
+  const onTwoFactorAuthSuccess = () => {
+    console.log("success");
+  };
+
   return (
     <div className="user">
       <div className="user__avartar">
@@ -207,6 +213,22 @@ export default function Account() {
               {user.password ? "Change" : "Set"} your password
             </button>
           ) : null}
+        </li>
+        <li className="user__detail user__detail--password">
+          <div className="flex">
+            <strong>Two-Factor Authentication</strong>
+          </div>
+          <button
+            className="secondary-button full-width"
+            type="button"
+            onClick={() => twoFactorAuthRef.current?.showModal()}
+          >
+            Add Two-Factor Authentication
+          </button>
+          <TwoFactorAuth
+            ref={twoFactorAuthRef}
+            onSuccess={onTwoFactorAuthSuccess}
+          />
         </li>
         <li className="user__detail">
           <div className="flex">
