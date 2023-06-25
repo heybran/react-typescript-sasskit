@@ -8,6 +8,7 @@ import { createUser, getUser, updateUser, deleteUser } from "./user.js";
 import bcrypt from "bcrypt";
 import speakeasy from "speakeasy";
 import QRCode from "qrcode";
+import { authenticator } from "otplib";
 
 dotenv.config();
 
@@ -46,7 +47,7 @@ app.post("/api/2fa/create", async (req, res) => {
   const { username } = req.body;
   // Returns an object with secret.ascii, secret.hex, and secret.base32.
   // Also returns secret.otpauth_url, which we'll use later.
-  const secret = speakeasy.generateSecret();
+  const secret = authenticator.generateSecret(); // base32 encoded hex secret key
   // Now, we want to make sure that this secret works by
   // validating the token that the user gets from it for the first time.
   // In other words, we don't want to set this as the user's secret key just yet,
@@ -55,22 +56,21 @@ app.post("/api/2fa/create", async (req, res) => {
   const user = await getUser({ username });
   const update = await updateUser({
     id: user[0].id,
-    tempSecret: secret.base32,
+    tempSecret: secret,
   });
 
   // Next, we'll want to display a QR code to the user so they can scan in the secret into their app.
   // Google Authenticator and similar apps take in a QR code that
   // holds a URL with the protocol otpauth://,
   // which you get automatically from secret.otpauth_url.
-  const otpauthUrl = speakeasy.otpauthURL({
-    secret: secret.base32,
-    // The name displayed in the Google Authenticator app
-    // after scanning a QR code
-    label: user[0].username,
-    issuer: "React SassKit",
-  });
+  const otpauth = authenticator.keyuri(
+    user[0].username,
+    "React SassKit",
+    secret,
+  );
+
   const qrDataUrl = await new Promise((resolve, reject) => {
-    QRCode.toDataURL(otpauthUrl, (err, dataUrl) => {
+    QRCode.toDataURL(otpauth, (err, dataUrl) => {
       if (err) {
         reject(err);
       } else {
@@ -85,15 +85,10 @@ app.post("/api/2fa/create", async (req, res) => {
 app.post("/api/2fa/verify", async (req, res) => {
   const { username, token } = req.body;
   const user = await getUser({ username });
-  console.log(user);
-  console.log(token);
-  const verified = speakeasy.totp.verify({
+  const verified = authenticator.verify({
     secret: user[0].tempSecret,
-    encoding: "base32",
     token,
   });
-
-  console.log(verified);
 
   if (!verified) {
     res.status(422).json({ message: "Wrong token." });
@@ -104,7 +99,7 @@ app.post("/api/2fa/verify", async (req, res) => {
       finalSecret: user[0].tempSecret,
       "2fa": true,
     });
-    console.log(update);
+    res.status(200).json({ message: "2FA enabled." });
   }
 });
 
