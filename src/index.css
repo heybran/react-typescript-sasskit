@@ -609,6 +609,11 @@ input:focus::placeholder {
   right: 1rem;
 }
 
+.spinner-center .spinner {
+  right: unset;
+  position: unset;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0);
@@ -772,4 +777,15 @@ form[method="dialog"] {
 form[method="dialog"] menu {
   display: flex;
   gap: 1rem;
+}
+
+dialog form {
+  max-block-size: min(80vh, 100%);
+  /*
+          Then I add a max-block-size so the dialog won't exceed the height of the page.
+          This also means that we'll need to specify where the scrollable area of the dialog is,
+          in case it's a tall dialog element.
+      */
+  max-block-size: min(80dvb, 100%);
+  overflow: hidden;
 }
