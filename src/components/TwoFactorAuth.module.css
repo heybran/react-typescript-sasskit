@@ -1,0 +1,24 @@
+.form {
+  padding: 0.5rem 1.5rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.article {
+  margin-inline: auto;
+  display: inline-grid;
+  place-content: center;
+  overflow-y: auto;
+}
+
+.qrcode-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.qrcode {
+  border: 1px solid var(--border-light-grey);
+  border-radius: 4px;
+}
