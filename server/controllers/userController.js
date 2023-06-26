@@ -187,14 +187,19 @@ export const userLogin = async (req, res) => {
     return;
   }
 
-  const userCookie = jwt.sign(userSent.username, jwtSecret);
-  res.cookie("user", userCookie, {
-    path: "/",
-    maxAge: 24 * 60 * 60 * 1000 * 30,
-    httpOnly: true,
-  });
+  if (!user[0]["2fa"]) {
+    const userCookie = jwt.sign(userSent.username, jwtSecret);
+    res.cookie("user", userCookie, {
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000 * 30,
+      httpOnly: true,
+    });
+  }
 
-  res.status(200).json({ message: "log in success" });
+  res.status(200).json({
+    message: "log in success",
+    "2fa": user[0]["2fa"],
+  });
 };
 
 /**

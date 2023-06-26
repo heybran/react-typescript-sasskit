@@ -7,6 +7,7 @@ import {
   createAndStoreTempSecret,
   verifyClientToken,
   deleteTwoFactorAuth,
+  loginWithTwoFactorAuth,
 } from "./controllers/twoFactorController.js";
 
 import {
@@ -56,6 +57,7 @@ app.get(/^((?!\/api\/).)*$/, async (req, res) => {
 app.post("/api/2fa/create", createAndStoreTempSecret);
 app.post("/api/2fa/verify", verifyClientToken);
 app.post("/api/2fa/delete", deleteTwoFactorAuth);
+app.post("/api/2fa/login", loginWithTwoFactorAuth);
 
 app.get("/api/user", checkLoginCookie);
 app.get("/api/user/:username", checkAvailableUsername);
