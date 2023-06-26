@@ -7,6 +7,7 @@ import Spinner from "../components/Spinner";
 import Input from "../components/Input";
 import Dialog from "../components/Dialog";
 import TwoFactorAuth from "../components/TwoFactorAuth";
+import RemoveTwoFactorAuth from "../components/removeTwoFactorAuth";
 
 export default function Account() {
   const { user, setUser } = useUserContext();
@@ -139,7 +140,21 @@ export default function Account() {
   const twoFactorAuthRef = useRef<HTMLDialogElement>(null);
   const onTwoFactorAuthSuccess = () => {
     console.log("2fa enabled.");
+    setUser({
+      ...user,
+      twoFactorAuth: true,
+    });
     twoFactorAuthRef.current?.close();
+  };
+
+  const removeTwoFactorAuthRef = useRef<HTMLDialogElement>(null);
+  const onRemoveTwoFactorAuthSuccess = () => {
+    console.log("2fa disabled.");
+    setUser({
+      ...user,
+      twoFactorAuth: false,
+    });
+    removeTwoFactorAuthRef.current?.close();
   };
 
   return (
@@ -222,14 +237,16 @@ export default function Account() {
           <button
             className="secondary-button full-width"
             type="button"
-            onClick={() => twoFactorAuthRef.current?.showModal()}
+            onClick={
+              !user.twoFactorAuth
+                ? () => twoFactorAuthRef.current?.showModal()
+                : () => removeTwoFactorAuthRef.current?.showModal()
+            }
           >
-            Add Two-Factor Authentication
+            {!user.twoFactorAuth
+              ? "Add Two-Factor Authentication"
+              : "Manage Two-Factor Authentication"}
           </button>
-          <TwoFactorAuth
-            ref={twoFactorAuthRef}
-            onSuccess={onTwoFactorAuthSuccess}
-          />
         </li>
         <li className="user__detail">
           <div className="flex">
@@ -288,6 +305,17 @@ export default function Account() {
             </footer>
           </form>
         </Dialog>
+        {user.twoFactorAuth ? (
+          <RemoveTwoFactorAuth
+            ref={removeTwoFactorAuthRef}
+            onSuccess={onRemoveTwoFactorAuthSuccess}
+          />
+        ) : (
+          <TwoFactorAuth
+            ref={twoFactorAuthRef}
+            onSuccess={onTwoFactorAuthSuccess}
+          />
+        )}
       </section>
     </div>
   );
