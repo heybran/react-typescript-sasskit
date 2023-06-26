@@ -14,6 +14,7 @@ import Login from "./routes/Login.tsx";
 
 export default function App() {
   const { isPending, user, setUser } = useUser();
+  console.log(user);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -34,7 +35,10 @@ export default function App() {
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route
+          path="/dashboard"
+          element={user.isLoggedIn ? <Dashboard /> : <Home />}
+        >
           <Route path="account" element={<Account />} />
           <Route path="pricing" element={<Pricing />} />
         </Route>
