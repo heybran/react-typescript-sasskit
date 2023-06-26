@@ -1,6 +1,11 @@
 import QRCode from "qrcode";
 import { authenticator } from "otplib";
 import { updateUser, getUser } from "../user.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+const jwtSecret = process.env.JWT_SECRET;
 
 /**
  * Creates a temporary secret for two-factor authentication and stores it for the user.
@@ -97,5 +102,34 @@ export const deleteTwoFactorAuth = async (req, res) => {
     res.status(500).json({ error: create.errors?.[0] });
   } else {
     res.status(200).json({ message: "2FA disabled." });
+  }
+};
+
+/**
+ * Check client auth code and handle login
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export const loginWithTwoFactorAuth = async (req, res) => {
+  const { username, token } = req.body;
+  const user = await getUser({ username });
+
+  const verified = authenticator.verify({
+    secret: user[0].finalSecret,
+    token,
+  });
+
+  if (!verified) {
+    res.status(422).json({ message: "Wrong token." });
+  } else {
+    const userCookie = jwt.sign(username, jwtSecret);
+    res.cookie("user", userCookie, {
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000 * 30,
+      httpOnly: true,
+    });
+    res.status(200).json({ message: "Log in success" });
   }
 };
