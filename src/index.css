@@ -770,16 +770,13 @@ h2:has(+ p) {
   background: #fcebee;
 }
 
-form[method="dialog"] {
-  padding: 0.5rem 1.5rem;
-}
-
-form[method="dialog"] menu {
+form menu {
   display: flex;
   gap: 1rem;
 }
 
 dialog form {
+  padding: 0.5rem 1.5rem;
   max-block-size: min(80vh, 100%);
   /*
           Then I add a max-block-size so the dialog won't exceed the height of the page.

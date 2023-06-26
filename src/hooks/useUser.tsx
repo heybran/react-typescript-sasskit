@@ -8,6 +8,7 @@ export default function useUser() {
     password: false,
     isLoggedIn: false,
     subscription: "free",
+    twoFactorAuth: false,
   });
 
   const [isPending, setIsPending] = useState(true);
@@ -19,8 +20,8 @@ export default function useUser() {
           credentials: "include",
         });
 
-        const { username, avatarUrl, subscription, password } =
-          await res.json();
+        const user = await res.json();
+        const { username, avatarUrl, subscription, password } = user;
         setUser({
           ...user,
           username,
@@ -28,6 +29,7 @@ export default function useUser() {
           subscription,
           password,
           isLoggedIn: true,
+          twoFactorAuth: user["2fa"],
         });
       } catch (error) {
         setUser({
@@ -37,6 +39,7 @@ export default function useUser() {
           subscription: "free",
           password: false,
           isLoggedIn: false,
+          twoFactorAuth: false,
         });
       } finally {
         setIsPending(false);

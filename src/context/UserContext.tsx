@@ -6,6 +6,7 @@ export interface User {
   password: boolean;
   isLoggedIn: boolean;
   subscription: "free" | "standard" | "premium";
+  twoFactorAuth: boolean;
 }
 
 interface UserContextProps {
