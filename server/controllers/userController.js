@@ -94,6 +94,10 @@ export const userSignUp = async (req, res) => {
   if (user.source !== "github") {
     user.password = await bcrypt.hash(user.password, 10);
   }
+  {
+    // as as of right now, no source column is added in database.
+    delete user.source;
+  }
 
   const create = await createUser({
     password: "",
