@@ -61,9 +61,11 @@ const GitHubAuth = () => {
             body: JSON.stringify({
               username,
               avatarUrl,
+              source: "github",
             }),
           })
-            // .then(() => (location.href = "/dashboard/account"))
+            .then((res) => res.json())
+            .then(() => (location.href = "/dashboard/account"))
             .catch((error) => console.error(error));
         } else {
           console.error(userRes.statusText);

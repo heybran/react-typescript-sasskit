@@ -91,7 +91,9 @@ export const checkAvailableUsername = async (req, res) => {
 export const userSignUp = async (req, res) => {
   /** @type {import('./user.js').User} */
   const user = req.body;
-  user.password = await bcrypt.hash(user.password, 10);
+  if (user.source !== "github") {
+    user.password = await bcrypt.hash(user.password, 10);
+  }
 
   const create = await createUser({
     password: "",
