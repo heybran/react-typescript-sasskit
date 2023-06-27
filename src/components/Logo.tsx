@@ -1,13 +1,14 @@
 import reactIcon from "../assets/react.svg";
 import { Link } from "react-router-dom";
+import styles from "./Logo.module.css";
 
 export default function Logo() {
   return (
-    <Link to="/" className="interio-header__logo">
-      <div className="interio-header__logo-inner">
+    <Link to="/" className={styles.logo}>
+      <div className={styles.logoSVG}>
         <img src={reactIcon} alt="React Logo" />
       </div>
-      <div className="interio-header__logo-text">
+      <div className={styles.logoText}>
         <span>React TypeScript</span>
         <span>SassKit</span>
       </div>

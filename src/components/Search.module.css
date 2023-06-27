@@ -1,0 +1,30 @@
+.search {
+  border-radius: var(--border-radius-medium);
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  gap: 0.5em;
+  color: var(--text-gray);
+  background: var(--background-light-grey);
+  border: 1px solid var(--border-light-gray);
+  padding: 10px;
+}
+
+.search:focus-within {
+  outline: 4px auto -webkit-focus-ring-color;
+  outline-offset: 4px;
+}
+
+.search .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.input {
+  background: transparent;
+  border: none transparent;
+  font-size: inherit;
+  outline: none;
+  font-size: 1.1em;
+  margin-top: 0;
+}

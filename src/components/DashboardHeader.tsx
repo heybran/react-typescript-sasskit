@@ -3,6 +3,7 @@ import Search from "./Search";
 import { useEffect, useRef } from "react";
 import { useUserContext } from "../context/UserContext";
 import defaultAvatar from "../assets/default_avatar.svg";
+import styles from "./Header.module.css";
 
 export default function DashboardHeader() {
   const { user } = useUserContext();
@@ -18,11 +19,11 @@ export default function DashboardHeader() {
   return (
     <header
       ref={headerRef}
-      className="interio-header interio-header--dashboard"
+      className={styles.header + " " + styles.headerDashboard}
     >
       <Logo />
       <Search />
-      <button className="interio-header__button-avatar">
+      <button className={styles.button}>
         <img
           src={user.avatarUrl || defaultAvatar}
           alt="User Avartar"

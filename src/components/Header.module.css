@@ -1,0 +1,32 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 12px;
+}
+
+.headerDashboard {
+  display: grid;
+  border-bottom: 1px solid var(--border-light-gray);
+  padding-inline: 1rem;
+  grid-template-columns: calc(250px - 1rem) 50ch 1fr;
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 10;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-left: auto;
+  border-radius: 8px;
+}
+
+.button img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
