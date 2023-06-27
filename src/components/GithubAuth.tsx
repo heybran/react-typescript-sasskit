@@ -70,7 +70,7 @@ const GitHubAuth = () => {
             source: "github",
           }),
         })
-          .then((res) => res.json())
+          // .then((res) => res.json())
           .then(() => (location.href = "/dashboard/account"))
           .catch((error) => console.error(error));
       } else {
