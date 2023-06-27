@@ -56,13 +56,7 @@ const GitHubAuth = () => {
       const userData = await userRes.json();
       const username = userData.login;
       const avatarUrl = userData.avatar_url;
-      const userExists = await fetch(`/api/user/${username}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username }),
-      });
+      const userExists = await fetch(`/api/user/${username}`);
       if (!userExists.ok) {
         // no this user, proceed to signup
         fetch("/api/user/create", {
@@ -91,7 +85,7 @@ const GitHubAuth = () => {
             source: "github",
           }),
         })
-          .then(() => res.json())
+          // .then(() => res.json())
           .then(() => (location.href = "/dashboard/account"))
           .catch((err) => console.error(err));
       }
