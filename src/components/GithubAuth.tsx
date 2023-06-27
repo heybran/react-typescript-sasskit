@@ -28,9 +28,6 @@ const GitHubAuth = () => {
   useEffect(() => {
     (async () => {
       const code = new URLSearchParams(window.location.search).get("code");
-      if (!code) {
-        return console.error(`code is missing`);
-      }
 
       const res = await fetch("/api/auth/github/callback", {
         method: "POST",
@@ -40,38 +37,63 @@ const GitHubAuth = () => {
         body: JSON.stringify({ code }),
       });
 
-      if (res.status === 200) {
-        const { access_token } = await res.json();
-        // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#3-use-the-access-token-to-access-the-api
-        const userRes = await fetch(`https://api.github.com/user`, {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        });
+      if (!res.ok) {
+        return console.error(res.statusText);
+      }
 
-        if (userRes.ok) {
-          const userData = await userRes.json();
-          const username = userData.login;
-          const avatarUrl = userData.avatar_url;
-          fetch("/api/user/create", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              username,
-              avatarUrl,
-              source: "github",
-            }),
-          })
-            .then((res) => res.json())
-            .then(() => (location.href = "/dashboard/account"))
-            .catch((error) => console.error(error));
-        } else {
-          console.error(userRes.statusText);
-        }
+      const { access_token } = await res.json();
+      // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#3-use-the-access-token-to-access-the-api
+      const userRes = await fetch(`https://api.github.com/user`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+
+      if (!userRes.ok) {
+        return console.error(userRes.statusText);
+      }
+
+      const userData = await userRes.json();
+      const username = userData.login;
+      const avatarUrl = userData.avatar_url;
+      const userExists = await fetch(`/api/user/${username}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+      });
+      if (!userExists.ok) {
+        // no this user, proceed to signup
+        fetch("/api/user/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            avatarUrl,
+            source: "github",
+          }),
+        })
+          .then((res) => res.json())
+          .then(() => (location.href = "/dashboard/account"))
+          .catch((error) => console.error(error));
       } else {
-        console.error(res.statusText);
+        // user exists, login this user
+        fetch("/api/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            source: "github",
+          }),
+        })
+          .then(() => res.json())
+          .then(() => (location.href = "/dashboard/account"))
+          .catch((err) => console.error(err));
       }
     })();
   }, []);

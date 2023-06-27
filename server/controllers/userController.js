@@ -181,12 +181,13 @@ export const userLogin = async (req, res) => {
     return;
   }
 
-  const match = await bcrypt.compare(userSent.password, user[0].password);
-  if (!match) {
-    res.status(404).json({
-      message: "Wrong password, please try again.",
-    });
-    return;
+  if (userSent.source !== "github") {
+    const match = await bcrypt.compare(userSent.password, user[0].password);
+    if (!match) {
+      res.status(404).json({
+        message: "Wrong password, please try again.",
+      });
+    }
   }
 
   if (!user[0]["2fa"]) {
