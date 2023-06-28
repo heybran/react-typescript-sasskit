@@ -3,10 +3,11 @@ import cors from "cors";
 import cookirParser from "cookie-parser";
 import path from "path";
 import dotenv from "dotenv";
+import apiRoutes from "./shared/apiRoutes.json" assert { type: "json" };
 import {
-  createAndStoreTempSecret,
-  verifyClientToken,
-  deleteTwoFactorAuth,
+  enableTwoFactorAuth,
+  verifyTwoFactorAuth,
+  disableTwoFactorAuth,
   loginWithTwoFactorAuth,
 } from "./controllers/twoFactorController.js";
 
@@ -53,11 +54,11 @@ app.get(/^((?!\/api\/).)*$/, async (req, res) => {
   res.sendFile(indexPath);
 });
 
-// 2FA
-app.post("/api/2fa/create", createAndStoreTempSecret);
-app.post("/api/2fa/verify", verifyClientToken);
-app.post("/api/2fa/delete", deleteTwoFactorAuth);
-app.post("/api/2fa/login", loginWithTwoFactorAuth);
+// Two-Factor Authentication
+app.post(apiRoutes.TWO_FACTOR_AUTH_ENABLE, enableTwoFactorAuth);
+app.post(apiRoutes.TWO_FACTOR_AUTH_VERIFY, verifyTwoFactorAuth);
+app.post(apiRoutes.TWO_FACTOR_AUTH_DISABLE, disableTwoFactorAuth);
+app.post(apiRoutes.TWO_FACTOR_AUTH_LOGIN, loginWithTwoFactorAuth);
 
 app.get("/api/user", checkLoginCookie);
 app.get("/api/user/:username", checkAvailableUsername);

@@ -4,6 +4,7 @@ import { GitHubLoginButton } from "../components/GithubAuth";
 import { useState, FormEvent } from "react";
 import Divider from "../components/Divider";
 import Spinner from "../components/Spinner";
+import apiEndpoints from "../../server/shared/apiRoutes.json";
 
 export default function Login() {
   const [status, setStatus] = useState("typing");
@@ -56,7 +57,7 @@ export default function Login() {
     setIsVerifyingAuth(true);
 
     try {
-      const res = await fetch("/api/2fa/login", {
+      const res = await fetch(apiEndpoints.TWO_FACTOR_AUTH_LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

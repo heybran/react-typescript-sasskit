@@ -3,6 +3,7 @@ import { FormEvent, Ref, forwardRef, useState } from "react";
 import Spinner from "./Spinner";
 import styles from "./TwoFactorAuth.module.css";
 import { useUserContext } from "../context/UserContext";
+import apiEndpoints from "../../server/shared/apiRoutes.json";
 
 interface AuthProps {
   onSuccess: () => void;
@@ -18,7 +19,7 @@ const TwoFactorAuth = forwardRef(
 
     const fetchQRCode = async () => {
       setIsFetchingQRCode(true);
-      const res = await fetch("/api/2fa/create", {
+      const res = await fetch(apiEndpoints.TWO_FACTOR_AUTH_ENABLE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +46,7 @@ const TwoFactorAuth = forwardRef(
       e.preventDefault();
       setIsVerifyingToken(true);
       try {
-        const res = await fetch("/api/2fa/verify", {
+        const res = await fetch(apiEndpoints.TWO_FACTOR_AUTH_VERIFY, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

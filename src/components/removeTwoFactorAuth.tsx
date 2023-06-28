@@ -2,6 +2,7 @@ import { forwardRef, Ref, useState, MouseEvent } from "react";
 import Dialog from "./Dialog";
 import { useUserContext } from "../context/UserContext";
 import Spinner from "./Spinner";
+import apiEndpoints from "../../server/shared/apiRoutes.json";
 
 interface AuthProps {
   onSuccess: () => void;
@@ -16,7 +17,7 @@ const RemoveTwoFactorAuth = forwardRef(
       e.preventDefault();
       setIsDiablingAuth(true);
       try {
-        const res = await fetch("/api/2fa/delete", {
+        const res = await fetch(apiEndpoints.TWO_FACTOR_AUTH_DISABLE, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

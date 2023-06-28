@@ -14,7 +14,7 @@ const jwtSecret = process.env.JWT_SECRET;
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const createAndStoreTempSecret = async (req, res) => {
+export const enableTwoFactorAuth = async (req, res) => {
   const { username } = req.body;
   // Returns an object with secret.ascii, secret.hex, and secret.base32.
   // Also returns secret.otpauth_url, which we'll use later.
@@ -60,7 +60,7 @@ export const createAndStoreTempSecret = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const verifyClientToken = async (req, res) => {
+export const verifyTwoFactorAuth = async (req, res) => {
   const { username, token } = req.body;
   const user = await getUser({ username });
   const verified = authenticator.verify({
@@ -88,7 +88,7 @@ export const verifyClientToken = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const deleteTwoFactorAuth = async (req, res) => {
+export const disableTwoFactorAuth = async (req, res) => {
   const { username } = req.body;
   const user = await getUser({ username });
   const deleteAuth = await updateUser({

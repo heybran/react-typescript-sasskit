@@ -1,0 +1,6 @@
+{
+  "TWO_FACTOR_AUTH_ENABLE": "/api/2fa/enable",
+  "TWO_FACTOR_AUTH_VERIFY": "/api/2fa/verify",
+  "TWO_FACTOR_AUTH_DISABLE": "/api/2fa/disable",
+  "TWO_FACTOR_AUTH_LOGIN": "/api/2fa/login"
+}
