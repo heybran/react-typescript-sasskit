@@ -9,11 +9,11 @@ A React/TypeScript/Express SassKit demo project with Github OAuth signup flow.
 
 ## Current App Features
 
-- Sign up
+- Sign up (including GitHub OAuth signup)
 - Login
 - Sign out
 - Change password
-- Github Auth signup/login (wip)
+- Add/remove two-factor authentication via Google Authenticator app
 - Upload avatar picture
 - Delete account
 - Change subscription
