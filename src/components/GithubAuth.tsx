@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Button from "./Button";
+import apiEndpoints from "../apiEndpoints";
 
 const GITHUB_CLIENT_ID = "0b3d7ed9ff20b068f060";
 const GITHUB_CALLBACK_URL = location.origin + "/auth/github/callback";
@@ -29,7 +30,7 @@ const GitHubAuth = () => {
     (async () => {
       const code = new URLSearchParams(window.location.search).get("code");
 
-      const res = await fetch("/api/auth/github/callback", {
+      const res = await fetch(apiEndpoints.GITHUB_AUTH_CALLBACK, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,10 +57,10 @@ const GitHubAuth = () => {
       const userData = await userRes.json();
       const username = userData.login;
       const avatarUrl = userData.avatar_url;
-      const userExists = await fetch(`/api/user/${username}`);
+      const userExists = await fetch(`/api/users/${username}`);
       if (!userExists.ok) {
         // no this user, proceed to signup
-        fetch("/api/user/create", {
+        fetch(apiEndpoints.USER_SIGNUP, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -75,7 +76,7 @@ const GitHubAuth = () => {
           .catch((error) => console.error(error));
       } else {
         // user exists, login this user
-        fetch("/api/user/login", {
+        fetch(apiEndpoints.USER_LOGIN, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { GitHubLoginButton } from "../components/GithubAuth";
 import { useState, KeyboardEvent, FormEvent } from "react";
 import Spinner from "../components/Spinner";
+import apiEndpoints from "../apiEndpoints";
 
 export default function Register() {
   const [isVerifyingUsername, setIsVerifyingUsername] = useState(false);
@@ -24,7 +25,7 @@ export default function Register() {
   const verifyUsername = async (username: string) => {
     // need to clear out error message
     setUsernameExists(false);
-    const res = await fetch(`/api/user/${username}`);
+    const res = await fetch(`/api/users/${username}`);
     if (res.ok) {
       // this user exits in database
       setUsernameExists(true);
@@ -41,7 +42,7 @@ export default function Register() {
     const formData = new FormData(e.target as HTMLFormElement);
     const user = Object.fromEntries(formData.entries());
     try {
-      const res = await fetch("/api/user/create", {
+      const res = await fetch(apiEndpoints.USER_SIGNUP, {
         method: "POST",
         headers: {
           /**

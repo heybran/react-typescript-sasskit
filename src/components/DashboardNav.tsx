@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { MouseEvent } from "react";
+import apiEndpoints from "../apiEndpoints";
 
 export default function DashboardNav() {
   const handleSignout = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    fetch("/api/user/signout", {
+    fetch(apiEndpoints.USER_SIGNOUT, {
       method: "POST",
       credentials: "include",
     })

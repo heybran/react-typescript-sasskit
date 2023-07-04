@@ -8,6 +8,7 @@ import Input from "../components/Input";
 import Dialog from "../components/Dialog";
 import TwoFactorAuth from "../components/TwoFactorAuth";
 import RemoveTwoFactorAuth from "../components/removeTwoFactorAuth";
+import apiEndpoints from "../apiEndpoints";
 
 export default function Account() {
   const { user, setUser } = useUserContext();
@@ -25,7 +26,7 @@ export default function Account() {
   const handleOnSuccess = async (avatarUrl: string) => {
     setIsUploadingAvatar(true);
     try {
-      await fetch("/api/user/update", {
+      await fetch(apiEndpoints.USER_UPDATE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +53,7 @@ export default function Account() {
     const passwords = Object.fromEntries(formData.entries());
     try {
       const isCurrentPasswordCorrectRes = await fetch(
-        "/api/user/verify-password",
+        apiEndpoints.USER_VERIFY_PASSWORD,
         {
           method: "POST",
           headers: {
@@ -82,7 +83,7 @@ export default function Account() {
     }
 
     try {
-      const res = await fetch("/api/user/update", {
+      const res = await fetch(apiEndpoints.USER_UPDATE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,7 +117,7 @@ export default function Account() {
   const confirmDeleteAccount = async () => {
     setIsDeleteAccount(true);
     try {
-      const res = await fetch("/api/user/delete", {
+      const res = await fetch(apiEndpoints.USER_DELETE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

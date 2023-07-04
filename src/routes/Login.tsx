@@ -4,7 +4,7 @@ import { GitHubLoginButton } from "../components/GithubAuth";
 import { useState, FormEvent } from "react";
 import Divider from "../components/Divider";
 import Spinner from "../components/Spinner";
-import apiEndpoints from "../../server/shared/apiRoutes.json";
+import apiEndpoints from "../apiEndpoints";
 
 export default function Login() {
   const [status, setStatus] = useState("typing");
@@ -21,7 +21,7 @@ export default function Login() {
     const formData = new FormData(e.target as HTMLFormElement);
     const user = Object.fromEntries(formData.entries());
     try {
-      const res = await fetch("/api/user/login", {
+      const res = await fetch(apiEndpoints.USER_LOGIN, {
         method: "POST",
         headers: {
           /**

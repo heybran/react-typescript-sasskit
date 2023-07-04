@@ -2,6 +2,7 @@ import { useState } from "react";
 import { User, useUserContext } from "../context/UserContext";
 import SignupButton from "./Signup";
 import Spinner from "./Spinner";
+import apiEndpoints from "../apiEndpoints";
 
 export default function PricingCard({ plan }: { plan: User["subscription"] }) {
   const { user, setUser } = useUserContext();
@@ -11,7 +12,7 @@ export default function PricingCard({ plan }: { plan: User["subscription"] }) {
     setIsChangingPlan(true); // we want to show a spinner inside the button
 
     try {
-      const res = await fetch("/api/user/update", {
+      const res = await fetch(apiEndpoints.USER_UPDATE, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
