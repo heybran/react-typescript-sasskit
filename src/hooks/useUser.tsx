@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../context/UserContext";
+import apiEndpoints from "../apiEndpoints";
+import { isResponseJson } from "../util.ts";
 
 export default function useUser() {
   const [user, setUser] = useState<User>({
@@ -14,14 +16,15 @@ export default function useUser() {
   const [isPending, setIsPending] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`/api/user`, {
-          credentials: "include",
-        });
+    fetch(apiEndpoints.USER_COOKIE, { credentials: "include" })
+      .then(async (res) => {
+        const data = isResponseJson(res) ? await res.json() : null;
 
-        const user = await res.json();
-        const { username, avatarUrl, subscription, password } = user;
+        if (!res.ok) {
+          return Promise.reject(data);
+        }
+
+        const { username, avatarUrl, subscription, password } = data;
         setUser({
           ...user,
           username,
@@ -29,22 +32,14 @@ export default function useUser() {
           subscription,
           password,
           isLoggedIn: true,
-          twoFactorAuth: user["2fa"],
+          twoFactorAuth: data["2fa"],
         });
-      } catch (error) {
-        setUser({
-          ...user,
-          username: "",
-          avatarUrl: "",
-          subscription: "free",
-          password: false,
-          isLoggedIn: false,
-          twoFactorAuth: false,
-        });
-      } finally {
         setIsPending(false);
-      }
-    })();
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsPending(false);
+      });
   }, []);
 
   return { isPending, user, setUser };
