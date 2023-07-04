@@ -19,8 +19,7 @@ const xata = getXataClient({
  * @param {User} user
  */
 export async function createUser(user) {
-  const record = await xata.db.users.create(user);
-  return record;
+  return xata.db.users.create(user);
 }
 
 export async function getUser({ username }) {
