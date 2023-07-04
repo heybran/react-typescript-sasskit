@@ -1,7 +1,9 @@
+// @ts-check
 import { createUser, getUser, updateUser, deleteUser } from "../user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import ProblemDetails from "../problemDetails.js";
 
 dotenv.config();
 const jwtSecret = process.env.JWT_SECRET;
@@ -13,11 +15,18 @@ const jwtSecret = process.env.JWT_SECRET;
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const checkLoginCookie = async (req, res) => {
+export const handleUserLoginCookie = async (req, res) => {
   const userCookie = req.cookies.user;
   if (!userCookie) {
-    res.status(401).send("Unauthorized");
-    return;
+    return res.status(401).json(
+      new ProblemDetails({
+        type: "about:blank",
+        title: "Unauthorized",
+        status: 401,
+        detail: "No session cookie is found on client.",
+        instance: req.url,
+      }),
+    );
   }
 
   jwt.verify(userCookie, jwtSecret, async (err, decoded) => {
@@ -65,7 +74,7 @@ export const checkLoginCookie = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const checkAvailableUsername = async (req, res) => {
+export const handleAvailableUsername = async (req, res) => {
   const { username } = req.params;
   const user = await getUser({ username: username });
 
@@ -88,36 +97,90 @@ export const checkAvailableUsername = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const userSignUp = async (req, res) => {
-  /** @type {import('./user.js').User} */
+export const handleUserSignUp = async (req, res) => {
+  /** @type {import('../types.js').User} */
   const user = req.body;
   if (user.source !== "github") {
     user.password = await bcrypt.hash(user.password, 10);
-  }
-  {
+  } else {
     // as as of right now, no source column is added in database.
     delete user.source;
   }
 
-  const create = await createUser({
-    password: "",
-    avatarUrl: "",
-    ...user,
-  });
+  try {
+    const create = await createUser({
+      password: "",
+      avatarUrl: "",
+      ...user,
+    });
 
-  if (create.errors) {
-    res.status(500).json({ error: create.errors[0] });
-    return;
+    /*
+      {
+        '2fa': false,
+        avatarUrl: '123',
+        id: 'rec_cihnsu5ep9elrjpa22a0',
+        password: '$2b$10$AAYnxORLabOYxdOUt6/BYulYHqsxDZEAL9v1VbdCZz7IBJQqOQ3FO',
+        subscription: 'free',
+        username: 'hello3',
+        xata: {
+          createdAt: 2023-07-04T02:05:44.821Z,
+          updatedAt: 2023-07-04T02:05:44.821Z,
+          version: 0
+        }
+      }
+    */
+
+    const userCookie = jwt.sign(user.username, jwtSecret);
+    res
+      .cookie("user", userCookie, {
+        path: "/",
+        maxAge: 24 * 60 * 60 * 1000 * 30,
+        httpOnly: true,
+      })
+      .sendStatus(200);
+  } catch (err) {
+    // 1. Connect Timeout Error
+    if (err.cause?.code === "UND_ERR_CONNECT_TIMEOUT") {
+      res.status(500).json(
+        new ProblemDetails({
+          type: "about:blank",
+          title: err.cause.code,
+          status: 500,
+          detail: err.cause.code,
+          instance: req.url,
+        }),
+      );
+      return;
+    }
+
+    // 2. Fetch Error
+    // when trying to create a user where its username already exists in database
+    // or insert a new column that is not defined in database schema
+    // XATA client will throw new FetcherError(response.status, jsonResponse, requestId);
+    /*
+      {
+        status: 400,
+        errors: [
+          {
+            message: 'invalid record: column [username]: is not unique',
+            status: 400
+          }
+        ],
+        requestId: 'c6a18e85-bce0-9f06-a9f8-7d84087754bd',
+        cause: undefined
+      }
+    */
+
+    res.status(err.status).json(
+      new ProblemDetails({
+        type: "about:blank",
+        title: err.errors?.[0].message,
+        status: err.status,
+        detail: err.errors?.[0].message,
+        instance: req.url,
+      }),
+    );
   }
-
-  const userCookie = jwt.sign(user.username, jwtSecret);
-  res.cookie("user", userCookie, {
-    path: "/",
-    maxAge: 24 * 60 * 60 * 1000 * 30,
-    httpOnly: true,
-  });
-
-  res.sendStatus(200);
 };
 
 /**
@@ -127,7 +190,7 @@ export const userSignUp = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const userUpdate = async (req, res) => {
+export const handleUserUpdate = async (req, res) => {
   const body = req.body;
   const user = await getUser({ username: body.username });
 
@@ -164,7 +227,7 @@ export const userUpdate = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const userSignOut = async (req, res) => {
+export const handleUserSignOut = async (req, res) => {
   res.clearCookie("user");
   res.status(200).send({ message: "Coolied cleared" });
 };
@@ -176,7 +239,7 @@ export const userSignOut = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const userLogin = async (req, res) => {
+export const handleUserLogin = async (req, res) => {
   const userSent = req.body;
   const user = await getUser({ username: userSent.username });
   // this username already exists in database
@@ -216,7 +279,7 @@ export const userLogin = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const verifyCurrentPassword = async (req, res) => {
+export const handleVerifyPassword = async (req, res) => {
   const userSent = req.body;
   const user = await getUser({ username: userSent.username });
   const match = await bcrypt.compare(userSent.password, user[0].password);
@@ -240,7 +303,7 @@ export const verifyCurrentPassword = async (req, res) => {
  * @param {Express.Response} res - The Express response object.
  * @returns {Promise<void>} A Promise that resolves when the operation is complete.
  */
-export const userDelete = async (req, res) => {
+export const handleUserDelete = async (req, res) => {
   const { username } = req.body;
   /** @type{import('./types.js').User}*/
   const user = await getUser({ username });
