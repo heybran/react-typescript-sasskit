@@ -14,7 +14,6 @@ import Login from "./routes/Login.tsx";
 
 export default function App() {
   const { isPending, user, setUser } = useUser();
-  console.log(user);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
