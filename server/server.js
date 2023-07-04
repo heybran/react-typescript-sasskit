@@ -12,14 +12,14 @@ import {
 } from "./controllers/twoFactorController.js";
 
 import {
-  checkLoginCookie,
-  checkAvailableUsername,
-  userSignUp,
-  userUpdate,
-  userSignOut,
-  userLogin,
-  verifyCurrentPassword,
-  userDelete,
+  handleUserLoginCookie,
+  handleAvailableUsername,
+  handleUserLogin,
+  handleUserDelete,
+  handleUserSignUp,
+  handleUserUpdate,
+  handleUserSignOut,
+  handleVerifyPassword,
 } from "./controllers/userController.js";
 
 import { handleGitHubAuth } from "./controllers/githubController.js";
@@ -30,7 +30,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: /*process.env.CLIENT_URL*/ "*",
     credentials: true,
     allowedHeaders: [
       "set-cookie",
@@ -60,19 +60,17 @@ app.post(apiRoutes.TWO_FACTOR_AUTH_VERIFY, verifyTwoFactorAuth);
 app.post(apiRoutes.TWO_FACTOR_AUTH_DISABLE, disableTwoFactorAuth);
 app.post(apiRoutes.TWO_FACTOR_AUTH_LOGIN, loginWithTwoFactorAuth);
 
-app.get("/api/user", checkLoginCookie);
-app.get("/api/user/:username", checkAvailableUsername);
-app.post("/api/user/signout", userSignOut);
-
-// curl -X POST -H "Content-Type: application/json" -d '{"username":"test1","password":"123","avatarUrl":"123"}' http://localhost:5000/api/user/create
-app.post("/api/user/create", userSignUp);
-app.post("/api/user/update", userUpdate);
-app.post("/api/user/login", userLogin);
-app.post("/api/user/verify-password", verifyCurrentPassword);
-app.post("/api/user/delete", userDelete);
+app.get(apiRoutes.USER_COOKIE, handleUserLoginCookie);
+app.get(apiRoutes.USER_AVAILABLE_NAME, handleAvailableUsername);
+app.post(apiRoutes.USER_SIGNOUT, handleUserSignOut);
+app.post(apiRoutes.USER_SIGNUP, handleUserSignUp);
+app.post(apiRoutes.USER_UPDATE, handleUserUpdate);
+app.post(apiRoutes.USER_LOGIN, handleUserLogin);
+app.post(apiRoutes.USER_VERIFY_PASSWORD, handleVerifyPassword);
+app.post(apiRoutes.USER_DELETE, handleUserDelete);
 
 // GitHub Auth
-app.post("/api/auth/github/callback", handleGitHubAuth);
+app.post(apiRoutes.GITHUB_AUTH_CALLBACK, handleGitHubAuth);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

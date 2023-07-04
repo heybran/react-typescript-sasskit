@@ -2,5 +2,14 @@
   "TWO_FACTOR_AUTH_ENABLE": "/api/2fa/enable",
   "TWO_FACTOR_AUTH_VERIFY": "/api/2fa/verify",
   "TWO_FACTOR_AUTH_DISABLE": "/api/2fa/disable",
-  "TWO_FACTOR_AUTH_LOGIN": "/api/2fa/login"
+  "TWO_FACTOR_AUTH_LOGIN": "/api/2fa/login",
+  "USER_COOKIE": "/api/users/cookie",
+  "USER_AVAILABLE_NAME": "/api/users/:username",
+  "USER_SIGNOUT": "/api/users/signout",
+  "USER_SIGNUP": "/api/users/signup",
+  "USER_LOGIN": "/api/users/login",
+  "USER_UPDATE": "/api/users/update",
+  "USER_VERIFY_PASSWORD": "/api/users/verify-password",
+  "USER_DELETE": "/api/users/delete",
+  "GITHUB_AUTH_CALLBACK": "/api/auth/github/callback"
 }
