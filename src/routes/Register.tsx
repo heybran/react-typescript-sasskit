@@ -96,6 +96,7 @@ export default function Register() {
           onChange={(e) =>
             setUser({ ...user, password: e.target.value.trim() })
           }
+          type="password"
           name="password"
           labelText="Password"
           id="register-password"
