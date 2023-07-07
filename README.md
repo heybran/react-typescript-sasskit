@@ -1,6 +1,6 @@
-# React TypeScript SassKit
+# React TypeScript SaasKit
 
-A React/TypeScript/Express SassKit demo project with Github OAuth signup flow.
+A React/TypeScript/Express SaasKit demo project with Github OAuth signup flow.
 
 - Front-End: React / React Router / TypeScript
 - Server: Express
