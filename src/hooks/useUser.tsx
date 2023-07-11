@@ -24,7 +24,8 @@ export default function useUser() {
           return Promise.reject(data);
         }
 
-        const { username, avatarUrl, subscription, password } = data;
+        const { username, avatarUrl, subscription, password, twoFactorAuth } =
+          data;
         setUser({
           ...user,
           username,
@@ -32,7 +33,7 @@ export default function useUser() {
           subscription,
           password,
           isLoggedIn: true,
-          twoFactorAuth: data["2fa"],
+          twoFactorAuth,
         });
         setIsPending(false);
       })

@@ -12,11 +12,17 @@ import {
 } from "./controllers/twoFactorController.js";
 
 import {
-  handleUserLoginCookie,
-  handleAvailableUsername,
-  handleUserLogin,
-  handleUserDelete,
   handleUserSignUp,
+  handleUserLoginCookie,
+  handleUserLogin,
+} from "./controllers/user.controller.js";
+
+import {
+  // handleUserLoginCookie,
+  handleAvailableUsername,
+  // handleUserLogin,
+  handleUserDelete,
+  // handleUserSignUp,
   handleUserUpdate,
   handleUserSignOut,
   handleVerifyPassword,
