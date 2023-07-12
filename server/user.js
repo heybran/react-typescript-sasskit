@@ -1,18 +1,5 @@
-// Generated with CLI
-import { getXataClient } from "./xata.js";
 import dotenv from "dotenv";
 dotenv.config();
-
-const xata = getXataClient({
-  apiKey: process.env.XATA_API_KEY,
-});
-
-/**
- * @typedef {Object} User
- * @property {string} username - The username of the user.
- * @property {string} password - The password of the user.
- * @property {string} avatarUrl - The URL of the user's avatar image.
- */
 
 /**
  * Creates a new user in database.

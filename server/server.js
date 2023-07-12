@@ -9,20 +9,20 @@ import {
   verifyTwoFactorAuth,
   disableTwoFactorAuth,
   loginWithTwoFactorAuth,
-} from "./controllers/twoFactorController.js";
+} from "./controllers/twoFactor.controller.js";
 
 import {
-  handleUserLoginCookie,
-  handleAvailableUsername,
-  handleUserLogin,
-  handleUserDelete,
   handleUserSignUp,
-  handleUserUpdate,
+  handleUserLoginCookie,
+  handleUserLogin,
   handleUserSignOut,
+  handleUserDelete,
+  handleAvailableUsername,
   handleVerifyPassword,
-} from "./controllers/userController.js";
+  handleUserUpdate,
+} from "./controllers/user.controller.js";
 
-import { handleGitHubAuth } from "./controllers/githubController.js";
+import { handleGitHubAuth } from "./controllers/github.controller.js";
 
 dotenv.config();
 const jwtSecret = process.env.JWT_SECRET;

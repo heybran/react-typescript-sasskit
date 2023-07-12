@@ -1,8 +1,0 @@
-{
-  "databaseURL": "https://Brandon-Zhang-s-workspace-kiil2j.us-east-1.xata.sh/db/react-typescript-sasskit",
-  "codegen": {
-    "output": "xata.js",
-    "moduleType": "esm",
-    "declarations": true
-  }
-}
