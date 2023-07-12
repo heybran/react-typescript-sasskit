@@ -71,7 +71,7 @@ export default function Account() {
       } else {
         setIsUpdatingPassword(false);
         const error = await isCurrentPasswordCorrectRes.json();
-        setUpdatePasswordError(error.message);
+        setUpdatePasswordError(error.detail);
       }
     } catch (error) {
       setIsUpdatingPassword(false);
@@ -99,6 +99,7 @@ export default function Account() {
       if (res.ok) {
         setUpdatePasswordError(null);
         setUser({ ...user, password: true });
+        setIsSettingPassword(false);
       } else {
         setUpdatePasswordError("Something went wrong, please try again.");
       }
