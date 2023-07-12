@@ -26,7 +26,7 @@ export const handleUserSignUp = async (req, res) => {
   try {
     const create = await query(
       "INSERT INTO users (username, password, avatar_url) values ($1, $2, $3) returning *",
-      [user.username, user.password, user.avatarUrl, 123],
+      [user.username, user.password, user.avatarUrl],
     );
 
     const userCookie = jwt.sign(user.username, jwtSecret);
@@ -238,6 +238,196 @@ export const handleUserLogin = async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json(
+      new ProblemDetails({
+        type: "about:blank",
+        title: "Internal server error",
+        status: 500,
+        detail: "Internal server error",
+        instance: req.url,
+      }),
+    );
+  }
+};
+
+/**
+ * Signs out an user by clearing cookie
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export const handleUserSignOut = async (_, res) => {
+  res.clearCookie("user");
+  res.status(200).send({ message: "Cookie cleared" });
+};
+
+/**
+ * Deletes a user from database
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export const handleUserDelete = async (req, res) => {
+  const { username } = req.body;
+  try {
+    const deleteRes = await query("DELETE FROM users WHERE username = $1", [
+      username,
+    ]);
+    if (deleteRes.rowCount === 0) {
+      // shouldn't happen
+    }
+    res.status(200).json({ message: "User deleted" });
+  } catch (err) {
+    return res.status(500).json(
+      new ProblemDetails({
+        type: "about:blank",
+        title: "Internal server error",
+        status: 500,
+        detail: "Internal server error",
+        instance: req.url,
+      }),
+    );
+  }
+};
+
+/**
+ * Checkes available username when user signup, single field validation
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export const handleAvailableUsername = async (req, res) => {
+  const { username } = req.params;
+  try {
+    const userRes = await query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+    if (userRes.rowCount === 0) {
+      return res.status(404).json(
+        new ProblemDetails({
+          type: "about:blank",
+          title: "User does not exist in database",
+          status: 404,
+          detail: "User does not exist in database",
+          instance: req.url,
+        }),
+      );
+    }
+
+    res.status(200).json({ user: userRes.rows[0] });
+  } catch (err) {
+    return res.status(500).json(
+      new ProblemDetails({
+        type: "about:blank",
+        title: "Internal server error",
+        status: 500,
+        detail: "Internal server error",
+        instance: req.url,
+      }),
+    );
+  }
+};
+
+/**
+ * Verifies current password when user tries to change password
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export const handleVerifyPassword = async (req, res) => {
+  const userSent = req.body;
+  try {
+    const userRes = await query("SELECT * FROM users WHERE username = $1", [
+      userSent.username,
+    ]);
+    const match = await bcrypt.compare(
+      userSent.password,
+      userRes.rows[0].password,
+    );
+    if (!match) {
+      return res.status(401).json(
+        new ProblemDetails({
+          type: "about:blank",
+          title: "Current password is not correct.",
+          status: 500,
+          detail: "Current password is not correct.",
+          instance: req.url,
+        }),
+      );
+    }
+
+    res.status(200).json({
+      message: "Current password is correct.",
+    });
+  } catch (err) {
+    return res.status(500).json(
+      new ProblemDetails({
+        type: "about:blank",
+        title: "Internal server error",
+        status: 500,
+        detail: "Internal server error",
+        instance: req.url,
+      }),
+    );
+  }
+};
+
+/**
+ * Updates a user
+ * @async
+ * @param {Express.Request} req - The Express request object.
+ * @param {Express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+ */
+export const handleUserUpdate = async (req, res) => {
+  const body = req.body;
+  const updateQue = [];
+
+  if (body.password) {
+    updateQue.push({
+      password: await bcrypt.hash(body.password, 10),
+    });
+  }
+
+  if (body.avatarUrl) {
+    updateQue.push({
+      avatar_url: body.avatarUrl,
+    });
+  }
+
+  if (body.subscription) {
+    updateQue.push({
+      subscription: body.subscription,
+    });
+  }
+
+  const updateQuery = `
+    UPDATE users
+    SET
+      ${updateQue
+        .map((column, index) => `${Object.keys(column)[0]} = $${index + 1}`)
+        .join(", ")}
+    WHERE
+      username = $${updateQue.length + 1}
+  `;
+
+  console.log(updateQuery);
+  const columnValues = updateQue.map((column) => Object.values(column)[0]);
+  console.log(columnValues);
+  try {
+    const userUpdate = await query(updateQuery, [
+      ...columnValues,
+      body.username,
+    ]);
+    if (userUpdate.rowCount === 0) {
+      // shouldn't happen
+    }
+    res.status(200).json({ message: "User updated" });
+  } catch (err) {
+    res.status(500).json(
       new ProblemDetails({
         type: "about:blank",
         title: "Internal server error",
